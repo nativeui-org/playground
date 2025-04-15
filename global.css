@@ -1,0 +1,109 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Base */
+    --radius: 0.75rem;
+    
+    /* Couleurs de base - Mode clair */
+    --primary: 222.2 47.4% 11.2%; /* Bleu foncé en mode clair */
+    --primary-light: 222.2 47.4% 20%;
+    --primary-dark: 222.2 47.4% 8%;
+    --primary-foreground: 210 40% 98%; /* Texte blanc sur fond primaire */
+    
+    --secondary: 210 40% 96.1%; /* Gris très clair en mode clair */
+    --secondary-light: 210 40% 98.1%;
+    --secondary-dark: 210 40% 92.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%; /* Texte foncé sur fond secondaire */
+
+    /* Interface utilisateur */
+    --background: 0 0% 100%; /* Blanc */
+    --foreground: 222.2 84% 4.9%; /* Texte presque noir */
+    
+    --card: 0 0% 100%; /* Cartes blanches */
+    --card-foreground: 222.2 84% 4.9%; /* Texte des cartes presque noir */
+    
+    --popover: 0 0% 100%; /* Popovers blancs */
+    --popover-foreground: 222.2 84% 4.9%; /* Texte popover presque noir */
+    
+    /* États et feedbacks */
+    --destructive: 0 84.2% 60.2%; /* Rouge vif */
+    --destructive-foreground: 210 40% 98%; /* Texte blanc sur destructive */
+    
+    --success: 142 76% 36%; /* Vert vif */
+    --success-foreground: 210 40% 98%; /* Texte blanc sur success */
+    
+    --warning: 38 92% 50%; /* Jaune vif */
+    --warning-foreground: 210 40% 98%; /* Texte blanc sur warning */
+    
+    --info: 204 94% 94%; /* Bleu clair */
+    --info-foreground: 199 89% 48%; /* Texte bleu foncé sur info */
+    
+    /* Éléments d'interface */
+    --muted: 210 40% 96.1%; /* Gris très clair */
+    --muted-foreground: 215.4 16.3% 46.9%; /* Texte gris moyen */
+    
+    --accent: 210 40% 96.1%; /* Accent gris clair */
+    --accent-foreground: 222.2 47.4% 11.2%; /* Texte foncé sur accent */
+    
+    --border: 214.3 31.8% 91.4%; /* Bordure gris clair */
+    --input: 214.3 31.8% 91.4%; /* Input gris clair */
+    --ring: 222.2 84% 4.9%; /* Anneau presque noir */
+  }
+
+  .dark {
+    /* Couleurs de base - Mode sombre */
+    --primary: 221 83% 53%; /* Bleu vif en mode sombre */
+    --primary-light: 217 91% 60%;
+    --primary-dark: 224 76% 48%;
+    --primary-foreground: 210 40% 98%; /* Texte blanc sur fond primaire */
+    
+    --secondary: 217.2 32.6% 17.5%; /* Gris foncé en mode sombre */
+    --secondary-light: 217.2 32.6% 22.5%;
+    --secondary-dark: 217.2 32.6% 12.5%;
+    --secondary-foreground: 210 40% 98%; /* Texte blanc sur fond secondaire */
+
+    /* Interface utilisateur */
+    --background: 222.2 84% 4.9%; /* Noir */
+    --foreground: 210 40% 98%; /* Texte blanc */
+    
+    --card: 222.2 84% 4.9%; /* Cartes noires */
+    --card-foreground: 210 40% 98%; /* Texte des cartes blanc */
+    
+    --popover: 222.2 84% 4.9%; /* Popovers noirs */
+    --popover-foreground: 210 40% 98%; /* Texte popover blanc */
+    
+    /* États et feedbacks */
+    --destructive: 0 62.8% 30.6%; /* Rouge sombre */
+    --destructive-foreground: 210 40% 98%; /* Texte blanc sur destructive */
+    
+    --success: 142 72% 29%; /* Vert sombre */
+    --success-foreground: 210 40% 98%; /* Texte blanc sur success */
+    
+    --warning: 38 92% 40%; /* Jaune sombre */
+    --warning-foreground: 210 40% 98%; /* Texte blanc sur warning */
+    
+    --info: 199 89% 48%; /* Bleu foncé */
+    --info-foreground: 210 40% 98%; /* Texte blanc sur info */
+    
+    /* Éléments d'interface */
+    --muted: 217.2 32.6% 17.5%; /* Gris foncé */
+    --muted-foreground: 215 20.2% 65.1%; /* Texte gris clair */
+    
+    --accent: 217.2 32.6% 17.5%; /* Accent gris foncé */
+    --accent-foreground: 210 40% 98%; /* Texte blanc sur accent */
+    
+    --border: 217.2 32.6% 17.5%; /* Bordure gris foncé */
+    --input: 217.2 32.6% 17.5%; /* Input gris foncé */
+    --ring: 212.7 26.8% 83.9%; /* Anneau gris clair */
+  }
+}
+
+/* Transition douce lors du changement de thème */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, border-radius 0.3s ease;
+}
+
+/* Vous pouvez ajouter des règles CSS supplémentaires ici si nécessaire */ 
