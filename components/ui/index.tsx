@@ -5,4 +5,4 @@ export { Header } from './header';
 export { Loading } from './loading';
 
 // Icons
-export { Loader, Loader2 } from './icons/loader'; 
+export { Loader } from './icons/loader'; 

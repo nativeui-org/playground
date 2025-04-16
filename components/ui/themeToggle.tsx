@@ -2,13 +2,16 @@ import React from 'react';
 import { TouchableOpacity, Text, View } from 'react-native';
 import { useTheme } from '@/context/ThemeContext';
 import { Feather } from '@expo/vector-icons';
+import { useColorScheme } from 'nativewind';
 
 interface ThemeToggleProps {
   className?: string;
 }
 
 export function ThemeToggle({ className = '' }: ThemeToggleProps) {
-  const { isDarkMode, toggleTheme } = useTheme();
+  const { theme, toggleTheme } = useTheme();
+  const { colorScheme } = useColorScheme();
+  const isDarkMode = colorScheme === 'dark';
 
   return (
     <TouchableOpacity

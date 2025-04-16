@@ -8,10 +8,10 @@
     --radius: 0.75rem;
     
     /* Couleurs de base - Mode clair */
-    --primary: 222.2 47.4% 11.2%; /* Bleu foncé en mode clair */
+    --primary: 222.2 84% 4.9%; /* Noir en mode clair */
     --primary-light: 222.2 47.4% 20%;
     --primary-dark: 222.2 47.4% 8%;
-    --primary-foreground: 210 40% 98%; /* Texte blanc sur fond primaire */
+    --primary-foreground: 0 0% 100%; /* Texte blanc sur fond primaire */
     
     --secondary: 210 40% 96.1%; /* Gris très clair en mode clair */
     --secondary-light: 210 40% 98.1%;
@@ -55,10 +55,10 @@
 
   .dark {
     /* Couleurs de base - Mode sombre */
-    --primary: 221 83% 53%; /* Bleu vif en mode sombre */
-    --primary-light: 217 91% 60%;
-    --primary-dark: 224 76% 48%;
-    --primary-foreground: 210 40% 98%; /* Texte blanc sur fond primaire */
+    --primary: 0 0% 100%; /* Blanc en mode sombre */
+    --primary-light: 210 40% 90%;
+    --primary-dark: 210 40% 95%;
+    --primary-foreground: 222.2 84% 4.9%; /* Texte noir sur fond primaire */
     
     --secondary: 217.2 32.6% 17.5%; /* Gris foncé en mode sombre */
     --secondary-light: 217.2 32.6% 22.5%;

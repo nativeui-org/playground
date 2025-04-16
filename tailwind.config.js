@@ -8,7 +8,6 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Couleurs de base 
         primary: {
           DEFAULT: "hsl(var(--primary))",
           light: "hsl(var(--primary-light))",
@@ -22,7 +21,6 @@ module.exports = {
           foreground: "hsl(var(--secondary-foreground))",
         },
         
-        // Interface utilisateur 
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: "hsl(var(--card))",
@@ -30,7 +28,6 @@ module.exports = {
         popover: "hsl(var(--popover))",
         "popover-foreground": "hsl(var(--popover-foreground))",
         
-        // États et feedbacks
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
@@ -48,7 +45,6 @@ module.exports = {
           foreground: "hsl(var(--info-foreground))",
         },
         
-        // Éléments d'interface
         muted: {
           DEFAULT: "hsl(var(--muted))",
           foreground: "hsl(var(--muted-foreground))",
@@ -72,4 +68,10 @@ module.exports = {
     },
   },
   plugins: [],
+  safelist: [
+    {
+      pattern: /^(bg|text|border)-/,
+      variants: ['dark'],
+    },
+  ],
 }; 

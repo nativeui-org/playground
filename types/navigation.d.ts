@@ -1,9 +1,10 @@
 import '@react-navigation/native-stack';
 import 'expo-router';
+import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 
 // Extend the NativeStackNavigationOptions to include NativeWind class name properties
 declare module '@react-navigation/native-stack' {
-  export interface NativeStackNavigationOptions {
+  interface NativeStackNavigationOptions {
     /**
      * Class name to apply NativeWind styles to the header
      */
@@ -28,6 +29,11 @@ declare module '@react-navigation/native-stack' {
      * Class name to apply NativeWind styles to the header back button
      */
     headerBackClassName?: string;
+    
+    /**
+     * Class name to apply NativeWind styles to the header background
+     */
+    headerBackgroundClassName?: string;
     
     // Make sure standard properties are recognized
     headerStyle?: any;

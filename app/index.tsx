@@ -4,19 +4,23 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather } from '@expo/vector-icons';
 import { useTheme } from '@/context/ThemeContext';
 import { ThemeToggle } from '@/components/ui';
+import { ThemeSwitcher } from '@/components/ThemeSwitcher';
 import { componentsList, ComponentItem } from '@/config/components-list';
 import { useRouter } from 'expo-router';
+import { useColorScheme } from 'nativewind';
 
 export default function ComponentsListScreen() {
-  const { isDarkMode } = useTheme();
+  const { theme } = useTheme();
+  const { colorScheme } = useColorScheme();
   const router = useRouter();
+  const isDarkMode = colorScheme === 'dark';
 
   const renderItem = ({ item }: { item: ComponentItem }) => (
     <Pressable 
-      className="flex-row items-center p-4 mb-2 rounded-lg border bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700"
+      className="flex-row items-center p-4 mb-2 rounded-lg border bg-card border-border"
       onPress={() => router.push(item.route as any)}
     >
-      <View className="rounded-full p-2 mr-4 bg-gray-100 dark:bg-gray-700">
+      <View className="rounded-full p-2 mr-4 bg-muted">
         <Feather 
           name={item.icon} 
           size={24} 
@@ -24,10 +28,10 @@ export default function ComponentsListScreen() {
         />
       </View>
       <View className="flex-1">
-        <Text className="text-lg font-semibold text-gray-900 dark:text-white">
+        <Text className="text-lg font-semibold text-foreground">
           {item.name}
         </Text>
-        <Text className="text-sm text-gray-500 dark:text-gray-300">
+        <Text className="text-sm text-muted-foreground">
           {item.description}
         </Text>
       </View>
@@ -40,12 +44,12 @@ export default function ComponentsListScreen() {
   );
 
   return (
-    <SafeAreaView className="flex-1" edges={['top']}>
-      <View className="flex-row justify-between items-center p-4 border-b border-gray-200 dark:border-gray-800">
+    <SafeAreaView className="flex-1 bg-background" edges={['top']}>
+      <View className="flex-row justify-between items-center p-4 border-b border-border">
         <View>
-          <Text className="text-2xl font-bold text-gray-900 dark:text-white">NativeUI</Text>
-          <Text className="text-sm text-gray-500 dark:text-gray-400">
-            Bibliothèque de composants React Native
+          <Text className="text-2xl font-bold text-foreground">NativeUI</Text>
+          <Text className="text-sm text-muted-foreground">
+            React Native Component Library
           </Text>
         </View>
         <ThemeToggle />
@@ -58,11 +62,12 @@ export default function ComponentsListScreen() {
         contentContainerClassName="p-4"
         ListHeaderComponent={
           <View className="mb-4">
-            <Text className="text-lg font-medium mb-1 text-gray-900 dark:text-white">
-              Composants disponibles
+            <ThemeSwitcher />
+            <Text className="text-lg font-medium mb-1 text-foreground mt-4">
+              Available Components
             </Text>
-            <Text className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-              Tapez sur un composant pour voir les détails et les exemples
+            <Text className="text-sm text-muted-foreground mb-4">
+              Tap on a component to see details and examples
             </Text>
           </View>
         }
