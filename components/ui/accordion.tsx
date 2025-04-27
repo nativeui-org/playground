@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { Pressable, View, Text, LayoutAnimation, Platform, UIManager, StyleSheet } from 'react-native';
-import { AntDesign } from '@expo/vector-icons';
+import { Pressable, View, Text, LayoutAnimation, Platform, UIManager } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import { cn } from '@/lib/utils';
-import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
 
 // Enable layout animation for Android
 if (Platform.OS === 'android') {
@@ -122,21 +122,13 @@ const AccordionTrigger = ({
   isExpanded,
 }: AccordionTriggerProps) => {
   const context = React.useContext(AccordionContext);
-  const rotation = useSharedValue(0);
 
   if (!context || value === undefined) {
     return null;
   }
 
-  React.useEffect(() => {
-    rotation.value = withTiming(isExpanded ? 180 : 0, { duration: 200 });
-  }, [isExpanded, rotation]);
-
-  const iconStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{ rotate: `${rotation.value}deg` }],
-    };
-  });
+  // Utiliser LayoutAnimation à la place de Reanimated pour l'icône
+  const iconRotation = isExpanded ? 180 : 0;
 
   const handlePress = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -152,17 +144,18 @@ const AccordionTrigger = ({
       )}
       accessibilityRole="button"
       accessibilityState={{ expanded: isExpanded }}
+      accessibilityHint="Toggle accordion section"
     >
       <View className="flex-1">
         {typeof children === 'string' ? (
-          <Text className="text-sm font-medium text-foreground">{children}</Text>
+          <Text className="text-base font-medium text-foreground">{children}</Text>
         ) : (
           children
         )}
       </View>
-      <Animated.View style={iconStyle}>
-        <AntDesign name="down" size={18} color="#888" />
-      </Animated.View>
+      <View style={{ transform: [{ rotate: `${iconRotation}deg` }] }}>
+        <Feather name="chevron-down" size={20} color="#888" />
+      </View>
     </Pressable>
   );
 };
@@ -180,50 +173,21 @@ const AccordionContent = ({
   value,
   isExpanded,
 }: AccordionContentProps) => {
-  const context = React.useContext(AccordionContext);
-  const [height, setHeight] = React.useState(0);
-  const animatedHeight = useSharedValue(0);
-
-  if (!context || value === undefined) {
-    return null;
-  }
-
-  React.useEffect(() => {
-    if (isExpanded) {
-      animatedHeight.value = withTiming(height, { duration: 200 });
-    } else {
-      animatedHeight.value = withTiming(0, { duration: 200 });
-    }
-  }, [isExpanded, height, animatedHeight]);
-
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      height: animatedHeight.value,
-      overflow: 'hidden',
-    };
-  });
-
-  if (!isExpanded && animatedHeight.value === 0) {
+  // Utiliser une approche simple sans animation de hauteur
+  if (!isExpanded) {
     return null;
   }
 
   return (
-    <Animated.View style={animatedStyle}>
-      <View
-        className={cn("pb-4 pt-0", className)}
-        onLayout={(e) => {
-          if (isExpanded) {
-            setHeight(e.nativeEvent.layout.height);
-          }
-        }}
-      >
-        {typeof children === 'string' ? (
-          <Text className="text-sm text-foreground">{children}</Text>
-        ) : (
-          children
-        )}
-      </View>
-    </Animated.View>
+    <View
+      className={cn("pb-4 pt-0", className)}
+    >
+      {typeof children === 'string' ? (
+        <Text className="text-base text-muted-foreground">{children}</Text>
+      ) : (
+        children
+      )}
+    </View>
   );
 };
 
