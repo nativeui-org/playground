@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Pressable, View, Text, LayoutAnimation, Platform, UIManager } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { cn } from '@/lib/utils';
-import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
 
 // Enable layout animation for Android
 if (Platform.OS === 'android') {
@@ -173,7 +172,6 @@ const AccordionContent = ({
   value,
   isExpanded,
 }: AccordionContentProps) => {
-  // Utiliser une approche simple sans animation de hauteur
   if (!isExpanded) {
     return null;
   }
