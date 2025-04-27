@@ -14,21 +14,13 @@ export const componentsList: ComponentItem[] = [
     name: 'Button',
     description: 'A flexible button component with different variants and sizes',
     icon: 'box',
-    route: 'components/button',
+    route: 'components/buttonExample',
   },
   {
-    id: 'theme-toggle',
-    name: 'Theme Toggle',
-    description: 'Toggle between light and dark modes',
-    icon: 'moon',
-    route: 'components/theme-toggle',
+    id: 'accordion',
+    name: 'Accordion',
+    description: 'A collapsible content component with an icon',
+    icon: 'chevron-down',
+    route: 'components/accordionExample',
   },
-  {
-    id: 'custom-styling',
-    name: 'Custom Styling',
-    description: 'Modern UI components with styled shadows and rounded corners',
-    icon: 'layout',
-    route: 'components/custom-styling',
-  },
-  // Vous pourrez ajouter d'autres composants ici au fil du temps
 ]; 

@@ -3,14 +3,13 @@ import { View, Text, ScrollView, ActivityIndicator } from "react-native";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Icon } from "@/components/ui/icon";
 import { Feather } from "@expo/vector-icons";
-import { useTheme } from "@/context/ThemeContext";
 import { useColorScheme } from "nativewind";
 import { Stack } from "expo-router";
 
 export default function ButtonScreen() {
   const [counter, setCounter] = useState(0);
+
   const { colorScheme } = useColorScheme();
   const isDark = colorScheme === 'dark';
 
@@ -114,7 +113,7 @@ export default function ButtonScreen() {
                   size="icon"
                   onPress={() => setCounter(counter + 1)}
                 >
-                  <Icon icon={Feather} name="plus" size={16} />
+                  <Feather name="plus" size={16} />
                 </Button>
               </View>
             </View>
@@ -146,7 +145,7 @@ export default function ButtonScreen() {
             <View className="gap-4">
               <View className="flex-row gap-3 flex-wrap">
                 <Button onPress={() => setCounter(counter + 1)}>
-                  <Icon icon={Feather} name="plus" size={16} color={isDark ? "#111827" : "white"} />
+                  <Feather name="plus" size={16} color={isDark ? "#111827" : "white"} />
                   <Text className="text-primary-foreground dark:text-primary-foreground ml-2">
                     With Icon
                   </Text>
@@ -156,7 +155,7 @@ export default function ButtonScreen() {
                   variant="outline"
                   onPress={() => setCounter(counter + 1)}
                 >
-                  <Icon icon={Feather} name="settings" size={16} color={isDark ? "white" : "#111827"} />
+                  <Feather name="settings" size={16} color={isDark ? "white" : "#111827"} />
                   <Text className="text-foreground dark:text-foreground ml-2">Settings</Text>
                 </Button>
               </View>
