@@ -58,4 +58,11 @@ export const componentsList: ComponentItem[] = [
     icon: 'lock',
     route: 'components/inputOTPExample',
   },
+  {
+    id: 'switch',
+    name: 'Switch',
+    description: 'A switch component',
+    icon: 'toggle-right',
+    route: 'components/switchExample',
+  },
 ]; 
