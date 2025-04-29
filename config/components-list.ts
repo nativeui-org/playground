@@ -12,7 +12,7 @@ export const componentsList: ComponentItem[] = [
   {
     id: 'button',
     name: 'Button',
-    description: 'A flexible button component with different variants and sizes',
+    description: 'A flexible button component',
     icon: 'box',
     route: 'components/buttonExample',
   },
@@ -43,5 +43,12 @@ export const componentsList: ComponentItem[] = [
     description: 'A text input component',
     icon: 'mail',
     route: 'components/inputExample',
+  },
+  {
+    id: 'textarea',
+    name: 'Textarea',
+    description: 'A multi-line text input component',
+    icon: 'message-circle',
+    route: 'components/textAreaExample',
   },
 ]; 
