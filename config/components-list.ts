@@ -37,4 +37,11 @@ export const componentsList: ComponentItem[] = [
     icon: 'user',
     route: 'components/avatarExample',
   },
+  {
+    id: 'input',
+    name: 'Input',
+    description: 'A text input component',
+    icon: 'mail',
+    route: 'components/inputExample',
+  },
 ]; 
