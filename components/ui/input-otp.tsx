@@ -2,7 +2,6 @@ import * as React from "react"
 import { View, Text, Pressable, TextInput, Keyboard, Platform } from "react-native"
 import { cn } from "@/lib/utils"
 
-// Create OTP Context to manage state
 interface OTPContextType {
   value: string
   setValue: React.Dispatch<React.SetStateAction<string>>
@@ -50,16 +49,13 @@ export const InputOTP = React.forwardRef<View, InputOTPProps>(
     const handleKeyPress = (text: string) => {
       if (!text) return
       
-      // Update the value at focused index if there is one
       if (focusedIndex !== null && focusedIndex < maxLength) {
         const newValue = [...otpCodeRef.current]
         
-        // If the input is a single character, insert it at the focused position
         if (text.length === 1) {
           newValue[focusedIndex] = text
           setValue(newValue.join(""))
           
-          // Move focus to next slot if not at the end
           if (focusedIndex < maxLength - 1) {
             setFocusedIndex(focusedIndex + 1)
           }
@@ -221,7 +217,6 @@ export const InputOTPSeparator = React.forwardRef<View, InputOTPSeparatorProps>(
 
 InputOTPSeparator.displayName = "InputOTPSeparator"
 
-// Helper hook to handle OTP input
 export function useOTPInput(maxLength: number) {
   const [otp, setOtp] = React.useState("")
   
