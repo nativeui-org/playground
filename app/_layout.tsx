@@ -31,8 +31,8 @@ export default function RootLayout() {
 
   return (
     <LinkingProvider>
-      <View className={`flex-1 bg-background dark:bg-background text-foreground dark:text-foreground ${colorScheme === 'dark' ? 'dark' : ''}`}>
-        <ThemeProvider>
+      <ThemeProvider>
+        <View className={`flex-1 bg-background dark:bg-background text-foreground dark:text-foreground ${colorScheme === 'dark' ? 'dark' : ''}`}>
           <Stack screenOptions={{ 
             headerShown: false,
             contentStyle: {
@@ -44,8 +44,8 @@ export default function RootLayout() {
             <Stack.Screen name="+not-found" />
           </Stack>
           <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
-        </ThemeProvider>
-      </View>
+        </View>
+      </ThemeProvider>
     </LinkingProvider>
   );
 }

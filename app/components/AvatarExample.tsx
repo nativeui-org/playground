@@ -33,10 +33,10 @@ export default function AvatarExample() {
             <View className="flex-row gap-4">
               <Avatar>
                 <AvatarImage
-                  source={{ uri: "https://github.com/shadcn.png" }}
+                  source={{ uri: "https://avatars.githubusercontent.com/u/204157942?s=200&v=4" }}
                   alt="Profile picture"
                 />
-                <AvatarFallback>CN</AvatarFallback>
+                <AvatarFallback>TR</AvatarFallback>
               </Avatar>
             </View>
           </View>
@@ -48,26 +48,26 @@ export default function AvatarExample() {
             <View className="flex-row items-center gap-4">
               <Avatar className="h-8 w-8">
                 <AvatarImage
-                  source={{ uri: "https://github.com/shadcn.png" }}
+                  source={{ uri: "https://avatars.githubusercontent.com/u/204157942?s=200&v=4" }}
                   alt="Small avatar"
                 />
-                <AvatarFallback>CN</AvatarFallback>
+                <AvatarFallback>TR</AvatarFallback>
               </Avatar>
 
               <Avatar>
                 <AvatarImage
-                  source={{ uri: "https://github.com/shadcn.png" }}
+                  source={{ uri: "https://avatars.githubusercontent.com/u/204157942?s=200&v=4" }}
                   alt="Default avatar"
                 />
-                <AvatarFallback>CN</AvatarFallback>
+                <AvatarFallback>TR</AvatarFallback>
               </Avatar>
 
               <Avatar className="h-16 w-16">
                 <AvatarImage
-                  source={{ uri: "https://github.com/shadcn.png" }}
+                  source={{ uri: "https://avatars.githubusercontent.com/u/204157942?s=200&v=4" }}
                   alt="Large avatar"
                 />
-                <AvatarFallback>CN</AvatarFallback>
+                <AvatarFallback>TR</AvatarFallback>
               </Avatar>
             </View>
           </View>
@@ -118,9 +118,9 @@ export default function AvatarExample() {
 
               <Avatar className="border-2 border-destructive">
                 <AvatarImage
-                  source={{ uri: "https://github.com/shadcn.png" }}
+                  source={{ uri: "https://avatars.githubusercontent.com/u/204157942?s=200&v=4" }}
                   alt="Bordered avatar"
-                  className="border border-background"
+                  className="border-sm border-background"
                 />
                 <AvatarFallback>BD</AvatarFallback>
               </Avatar>
