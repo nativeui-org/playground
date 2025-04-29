@@ -23,4 +23,18 @@ export const componentsList: ComponentItem[] = [
     icon: 'chevron-down',
     route: 'components/accordionExample',
   },
+  {
+    id: 'badge',
+    name: 'Badge',
+    description: 'A small, colored label component',
+    icon: 'tag',
+    route: 'components/badgeExample',
+  },
+  {
+    id: 'avatar',
+    name: 'Avatar',
+    description: 'A circular image component',
+    icon: 'user',
+    route: 'components/avatarExample',
+  },
 ]; 

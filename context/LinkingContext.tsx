@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Linking } from 'react-native';
+import { Linking, Platform } from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
 
 // Regular LinkingContext for opened URLs
@@ -18,12 +18,28 @@ export const UnhandledLinkingContext = React.createContext<{
 
 export function LinkingProvider({ children }: { children: React.ReactNode }) {
   const openURL = React.useCallback(async (url: string) => {
-    await Linking.openURL(url);
+    try {
+      await Linking.openURL(url);
+    } catch (error) {
+      console.error('Error opening URL with Linking:', error);
+    }
   }, []);
 
   const handleURL = React.useCallback(async (url: string) => {
     try {
-      // Try to open with WebBrowser for better UX
+      // Check if URL is valid before attempting to open
+      if (!url || typeof url !== 'string') {
+        console.warn('Invalid URL provided to handleURL:', url);
+        return false;
+      }
+
+      // On web, use window.open
+      if (Platform.OS === 'web') {
+        window.open(url, '_blank');
+        return true;
+      }
+
+      // Try to open with WebBrowser for better UX on mobile
       await WebBrowser.openBrowserAsync(url);
       return true;
     } catch (error) {
@@ -31,16 +47,20 @@ export function LinkingProvider({ children }: { children: React.ReactNode }) {
         // Fallback to default Linking
         await Linking.openURL(url);
         return true;
-      } catch (error) {
-        console.error('Error opening URL:', error);
+      } catch (secondError) {
+        console.error('Failed to open URL:', url, secondError);
         return false;
       }
     }
   }, []);
 
+  // Create context values once to avoid rerenders
+  const linkingValue = React.useMemo(() => ({ openURL }), [openURL]);
+  const unhandledLinkingValue = React.useMemo(() => ({ handleURL }), [handleURL]);
+
   return (
-    <LinkingContext.Provider value={{ openURL }}>
-      <UnhandledLinkingContext.Provider value={{ handleURL }}>
+    <LinkingContext.Provider value={linkingValue}>
+      <UnhandledLinkingContext.Provider value={unhandledLinkingValue}>
         {children}
       </UnhandledLinkingContext.Provider>
     </LinkingContext.Provider>
@@ -48,9 +68,17 @@ export function LinkingProvider({ children }: { children: React.ReactNode }) {
 }
 
 export function useLinking() {
-  return React.useContext(LinkingContext);
+  const context = React.useContext(LinkingContext);
+  if (context === undefined) {
+    throw new Error('useLinking must be used within a LinkingProvider');
+  }
+  return context;
 }
 
 export function useUnhandledLinking() {
-  return React.useContext(UnhandledLinkingContext);
+  const context = React.useContext(UnhandledLinkingContext);
+  if (context === undefined) {
+    throw new Error('useUnhandledLinking must be used within a LinkingProvider');
+  }
+  return context;
 } 

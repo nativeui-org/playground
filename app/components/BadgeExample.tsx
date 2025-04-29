@@ -4,8 +4,13 @@ import { Badge } from "@/components/ui/badge";
 import { ThemeToggle } from "@/components/ui";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Stack } from "expo-router";
+import { Feather } from "@expo/vector-icons";
+import { useColorScheme } from "nativewind";
 
 export default function BadgeExample() {
+  const { colorScheme } = useColorScheme();
+  const isDark = colorScheme === "dark";
+
   return (
     <>
       <Stack.Screen
@@ -31,10 +36,10 @@ export default function BadgeExample() {
               Badge Variants
             </Text>
             <View className="flex-row flex-wrap gap-4">
-              <Badge variant="default" label="Default" />
-              <Badge variant="secondary" label="Secondary" />
-              <Badge variant="destructive" label="Destructive" />
-              <Badge variant="outline" label="Outline" />
+              <Badge variant="default">Default</Badge>
+              <Badge variant="secondary">Secondary</Badge>
+              <Badge variant="destructive">Destructive</Badge>
+              <Badge variant="outline">Outline</Badge>
             </View>
           </View>
 
@@ -43,9 +48,76 @@ export default function BadgeExample() {
               Badge Sizes
             </Text>
             <View className="flex-row items-center gap-4">
-              <Badge size="sm" label="Small" />
-              <Badge size="default" label="Default" />
-              <Badge size="lg" label="Large" />
+              <Badge variant="default" size="sm">
+                Small
+              </Badge>
+              <Badge variant="default" size="default">
+                Default
+              </Badge>
+              <Badge variant="default" size="lg">
+                Large
+              </Badge>
+            </View>
+          </View>
+
+          <View className="mb-8">
+            <Text className="text-xl font-semibold mb-4 text-foreground">
+              With Icons
+            </Text>
+            <View className="flex-row items-center gap-4">
+              <Badge variant="default" size="default">
+                <View className="flex-row items-center">
+                  <Feather
+                    name="check"
+                    size={14}
+                    color={isDark ? "#171717" : "white"}
+                    style={{ marginRight: 4 }}
+                  />
+                  <Text className="text-xs font-medium text-primary-foreground">
+                    Verified
+                  </Text>
+                </View>
+              </Badge>
+              <Badge variant="default" size="default">
+                <View className="flex-row items-center">
+                  <Text className="text-xs font-medium text-primary-foreground">
+                    Delete
+                  </Text>
+                  <Feather
+                    name="x"
+                    size={14}
+                    onPress={() => Alert.alert("Badge Clicked", "You clicked the delete badge")}
+                    color={isDark ? "#171717" : "white"}
+                    style={{ marginLeft: 4 }}
+                  />
+                </View>
+              </Badge>
+              <Badge variant="secondary" size="default">
+                <View className="flex-row items-center">
+                  <Feather
+                    name="star"
+                    size={14}
+                    color={isDark ? "white" : "#171717"}
+                    style={{ marginRight: 4 }}
+                  />
+                  <Text className="text-xs font-medium text-secondary-foreground">
+                    Featured
+                  </Text>
+                </View>
+              </Badge>
+              <Badge variant="destructive" size="default">
+                <View className="flex-row items-center">
+                  <Feather
+                    name="alert-circle"
+                    size={14}
+                    color={isDark ? "white" : "#171717"}
+                    style={{ marginRight: 4 }}
+                  />
+                  <Text className="text-xs font-medium text-destructive-foreground">
+                    Alert
+                  </Text>
+                </View>
+              </Badge>
             </View>
           </View>
 
@@ -54,26 +126,44 @@ export default function BadgeExample() {
               Interactive Badges
             </Text>
             <View className="flex-row flex-wrap gap-4">
-              <Badge 
-                variant="default" 
-                label="Click me" 
-                onPress={() => Alert.alert("Badge Clicked", "You clicked the default badge")}
-              />
-              <Badge 
-                variant="secondary" 
-                label="Tap here" 
-                onPress={() => Alert.alert("Badge Clicked", "You clicked the secondary badge")}
-              />
-              <Badge 
-                variant="destructive" 
-                label="Delete" 
-                onPress={() => Alert.alert("Badge Clicked", "You clicked the destructive badge")}
-              />
-              <Badge 
-                variant="outline" 
-                label="More info" 
-                onPress={() => Alert.alert("Badge Clicked", "You clicked the outline badge")}
-              />
+              <Badge
+                variant="default"
+                onPress={() =>
+                  Alert.alert("Badge Clicked", "You clicked the default badge")
+                }
+              >
+                Click me
+              </Badge>
+              <Badge
+                variant="secondary"
+                onPress={() =>
+                  Alert.alert(
+                    "Badge Clicked",
+                    "You clicked the secondary badge"
+                  )
+                }
+              >
+                Tap here
+              </Badge>
+              <Badge
+                variant="destructive"
+                onPress={() =>
+                  Alert.alert(
+                    "Badge Clicked",
+                    "You clicked the destructive badge"
+                  )
+                }
+              >
+                Delete
+              </Badge>
+              <Badge
+                variant="outline"
+                onPress={() =>
+                  Alert.alert("Badge Clicked", "You clicked the outline badge")
+                }
+              >
+                More info
+              </Badge>
             </View>
           </View>
 
@@ -83,15 +173,23 @@ export default function BadgeExample() {
             </Text>
             <View className="flex-row items-center gap-8">
               <View className="items-center">
-                <Badge variant="destructive" label="3" className="h-5 w-5 mb-2" />
+                <Badge variant="destructive" className="h-5 w-5 mb-2">
+                  3
+                </Badge>
                 <Text className="text-sm text-muted-foreground">Messages</Text>
               </View>
               <View className="items-center">
-                <Badge variant="default" label="12" className="h-5 w-5 mb-2" />
-                <Text className="text-sm text-muted-foreground">Notifications</Text>
+                <Badge variant="default" className="h-5 w-5 mb-2">
+                  12
+                </Badge>
+                <Text className="text-sm text-muted-foreground">
+                  Notifications
+                </Text>
               </View>
               <View className="items-center">
-                <Badge variant="secondary" label="5+" className="h-5 w-5 mb-2" />
+                <Badge variant="secondary" className="h-5 w-5 mb-2">
+                  5+
+                </Badge>
                 <Text className="text-sm text-muted-foreground">Updates</Text>
               </View>
             </View>
@@ -103,15 +201,15 @@ export default function BadgeExample() {
             </Text>
             <View className="gap-4">
               <View className="flex-row items-center">
-                <Badge label="Online" className="bg-green-500 text-white mr-2" />
+                <Badge className="bg-green-500 text-white mr-2">Online</Badge>
                 <Text className="text-foreground">User is available</Text>
               </View>
               <View className="flex-row items-center">
-                <Badge label="Away" className="bg-yellow-500 text-white mr-2" />
+                <Badge className="bg-yellow-500 text-white mr-2">Away</Badge>
                 <Text className="text-foreground">User is inactive</Text>
               </View>
               <View className="flex-row items-center">
-                <Badge label="Offline" className="bg-gray-400 text-white mr-2" />
+                <Badge className="bg-gray-400 text-white mr-2">Offline</Badge>
                 <Text className="text-foreground">User is disconnected</Text>
               </View>
             </View>
@@ -120,4 +218,4 @@ export default function BadgeExample() {
       </SafeAreaView>
     </>
   );
-} 
+}

@@ -14,9 +14,9 @@ const badgeVariants = cva(
         outline: "border border-input bg-transparent",
       },
       size: {
-        default: "h-6",
-        sm: "h-5 text-xs px-2",
-        lg: "h-7 text-sm px-3",
+        default: "h-8 px-3",
+        sm: "h-6 px-2.5",
+        lg: "h-10 px-4",
       },
     },
     defaultVariants: {
@@ -30,8 +30,9 @@ export interface BadgeProps
   extends VariantProps<typeof badgeVariants> {
   className?: string;
   style?: ViewStyle;
-  label: string;
+  children: React.ReactNode;
   onPress?: () => void;
+  accessibilityLabel?: string;
 }
 
 function Badge({
@@ -39,23 +40,48 @@ function Badge({
   variant,
   size,
   style,
-  label,
+  children,
   onPress,
+  accessibilityLabel,
 }: BadgeProps) {
+  const getTextStyle = () => {
+    let textStyle = "font-medium";
+    
+    // Adjust text size based on badge size
+    if (size === "lg") {
+      textStyle = cn(textStyle, "text-sm");
+    } else if (size === "sm") {
+      textStyle = cn(textStyle, "text-xs");
+    } else {
+      textStyle = cn(textStyle, "text-xs");
+    }
+    
+    // Adjust text color based on variant
+    if (variant === "default") {
+      textStyle = cn(textStyle, "text-primary-foreground");
+    } else if (variant === "secondary") {
+      textStyle = cn(textStyle, "text-secondary-foreground");
+    } else if (variant === "destructive") {
+      textStyle = cn(textStyle, "text-destructive-foreground");
+    } else if (variant === "outline") {
+      textStyle = cn(textStyle, "text-foreground");
+    }
+    
+    return textStyle;
+  };
+
   const content = (
     <View className={cn(badgeVariants({ variant, size, className }))} style={style}>
-      <Text
-        className={cn(
-          "text-xs font-medium",
-          variant === "default" && "text-primary-foreground",
-          variant === "secondary" && "text-secondary-foreground",
-          variant === "destructive" && "text-destructive-foreground",
-          variant === "outline" && "text-foreground"
-        )}
-        numberOfLines={1}
-      >
-        {label}
-      </Text>
+      {typeof children === 'string' ? (
+        <Text
+          className={getTextStyle()}
+          numberOfLines={1}
+        >
+          {children}
+        </Text>
+      ) : (
+        children
+      )}
     </View>
   );
 
@@ -64,7 +90,7 @@ function Badge({
       <Pressable
         onPress={onPress}
         accessibilityRole="button"
-        accessibilityLabel={label}
+        accessibilityLabel={accessibilityLabel || (typeof children === 'string' ? children : undefined)}
       >
         {({ pressed }) => (
           <View style={{ opacity: pressed ? 0.7 : 1 }}>
