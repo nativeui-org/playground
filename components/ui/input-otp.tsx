@@ -120,6 +120,7 @@ export const InputOTP = React.forwardRef<View, InputOTPProps>(
             ref={inputRef}
             className="absolute opacity-0 h-px w-px"
             keyboardType="number-pad"
+            textContentType="oneTimeCode"
             value=""
             onChangeText={handleKeyPress}
             onKeyPress={({ nativeEvent }) => {
