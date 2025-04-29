@@ -51,4 +51,11 @@ export const componentsList: ComponentItem[] = [
     icon: 'message-circle',
     route: 'components/textAreaExample',
   },
+  {
+    id: 'inputOTP',
+    name: 'Input OTP',
+    description: 'A component for entering OTP codes',
+    icon: 'lock',
+    route: 'components/inputOTPExample',
+  },
 ]; 
