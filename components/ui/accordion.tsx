@@ -126,7 +126,6 @@ const AccordionTrigger = ({
     return null;
   }
 
-  // Utiliser LayoutAnimation à la place de Reanimated pour l'icône
   const iconRotation = isExpanded ? 180 : 0;
 
   const handlePress = () => {
