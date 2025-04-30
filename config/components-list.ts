@@ -86,4 +86,11 @@ export const componentsList: ComponentItem[] = [
     icon: 'sliders',
     route: 'components/sliderExample',
   },
+  {
+    id: 'select',
+    name: 'Select',
+    description: 'A select component',
+    icon: 'chevron-down',
+    route: 'components/selectExample',
+  },
 ]; 
