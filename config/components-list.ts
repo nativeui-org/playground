@@ -79,4 +79,11 @@ export const componentsList: ComponentItem[] = [
     icon: 'check',
     route: 'components/checkboxExample',
   },
+  {
+    id: 'slider',
+    name: 'Slider',
+    description: 'A slider component',
+    icon: 'sliders',
+    route: 'components/sliderExample',
+  },
 ]; 
