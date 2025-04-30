@@ -1,5 +1,5 @@
 import * as React from "react"
-import { TouchableOpacity, View, Animated, Platform } from "react-native"
+import { TouchableOpacity, Animated } from "react-native"
 import { cn } from "@/lib/utils"
 
 interface SwitchProps extends Omit<React.ComponentPropsWithoutRef<typeof TouchableOpacity>, "onPress"> {

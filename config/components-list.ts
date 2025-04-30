@@ -65,4 +65,11 @@ export const componentsList: ComponentItem[] = [
     icon: 'toggle-right',
     route: 'components/switchExample',
   },
+  {
+    id: 'radioGroup',
+    name: 'Radio Group',
+    description: 'A group of radio buttons',
+    icon: 'radio',
+    route: 'components/radioGroupExample',
+  },
 ]; 
