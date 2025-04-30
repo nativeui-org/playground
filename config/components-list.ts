@@ -93,4 +93,11 @@ export const componentsList: ComponentItem[] = [
     icon: 'chevron-down',
     route: 'components/selectExample',
   },
+  {
+    id: 'popover',
+    name: 'Popover',
+    description: 'A popover component',
+    icon: 'chevron-up',
+    route: 'components/popoverExample',
+  },
 ]; 
