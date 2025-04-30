@@ -72,4 +72,11 @@ export const componentsList: ComponentItem[] = [
     icon: 'radio',
     route: 'components/radioGroupExample',
   },
+  {
+    id: 'checkbox',
+    name: 'Checkbox',
+    description: 'A checkbox component',
+    icon: 'check',
+    route: 'components/checkboxExample',
+  },
 ]; 
