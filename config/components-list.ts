@@ -100,4 +100,11 @@ export const componentsList: ComponentItem[] = [
     icon: 'chevron-up',
     route: 'components/popoverExample',
   },
+  {
+    id: 'drawer',
+    name: 'Drawer',
+    description: 'A drawer component',
+    icon: 'menu',
+    route: 'components/drawerExample',
+  },
 ]; 
