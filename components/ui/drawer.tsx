@@ -25,14 +25,12 @@ interface DrawerProps {
 }
 
 const { height: SCREEN_HEIGHT } = Dimensions.get("window")
-const DEFAULT_SNAP_POINTS = [0.5, 0.9] // 50% and 90% of screen height
+const DEFAULT_SNAP_POINTS = [0.5, 0.9] // 0.5 = 50% of screen height, 0.9 = 90% of screen height
 
-// Créer un contexte pour partager la fonction animateClose
 export const DrawerContext = React.createContext<{ animateClose: () => void }>({
   animateClose: () => {},
 })
 
-// Hook custom pour utiliser le contexte du Drawer
 export const useDrawer = () => React.useContext(DrawerContext)
 
 const Drawer = React.forwardRef<View, DrawerProps>(
@@ -46,7 +44,6 @@ const Drawer = React.forwardRef<View, DrawerProps>(
     className,
     contentClassName
   }, ref) => {
-    // Convert snap points from percentages to pixels (from screen top)
     const snapPointsPixels = snapPoints.map(point => 
       SCREEN_HEIGHT - (SCREEN_HEIGHT * point)
     )
@@ -110,6 +107,13 @@ const Drawer = React.forwardRef<View, DrawerProps>(
       }
     }, [open, animateOpen])
     
+    // Ensure drawer animates close when open becomes false
+    React.useEffect(() => {
+      if (!open && !isClosing.current) {
+        animateClose()
+      }
+    }, [open, animateClose])
+    
     const animateToSnapPoint = (index: number, velocity = 0) => {
       if (index < 0 || index >= snapPointsPixels.length) return
       
@@ -127,33 +131,27 @@ const Drawer = React.forwardRef<View, DrawerProps>(
     const getTargetSnapIndex = (currentY: number, velocity: number, dragDirection: 'up' | 'down') => {
       const isDraggingDown = dragDirection === 'down'
       
-      // Step down from top snap point when dragging down
       if (activeSnapIndex.current === snapPointsPixels.length - 1 && isDraggingDown) {
         return snapPointsPixels.length - 2
       }
       
-      // Step down from middle snap with good velocity
       if (activeSnapIndex.current === 1 && isDraggingDown && velocity > 0.3) {
         return 0
       }
       
-      // Close from bottom snap when dragging down with velocity
       if (activeSnapIndex.current === 0 && isDraggingDown && velocity > 0.5) {
         return -1
       }
       
-      // Close if dragged far below the lowest snap point
       if (currentY > snapPointsPixels[0] + 100) {
         return -1
       }
       
-      // Step up when dragging up with good velocity
       if (dragDirection === 'up' && velocity > 0.3) {
         const nextIndex = Math.min(activeSnapIndex.current + 1, snapPointsPixels.length - 1)
         return nextIndex
       }
       
-      // Find closest snap point
       let closestIndex = 0
       let minDistance = Math.abs(currentY - snapPointsPixels[0])
       
@@ -187,7 +185,6 @@ const Drawer = React.forwardRef<View, DrawerProps>(
           const currentSnapY = snapPointsPixels[activeSnapIndex.current];
           let newY = currentSnapY + dy;
           
-          // Apply resistance when dragging beyond the highest snap point
           if (newY < maxDragPoint) {
             const overscroll = maxDragPoint - newY;
             const resistedOverscroll = -Math.log10(1 + overscroll * 0.1) * 10;
