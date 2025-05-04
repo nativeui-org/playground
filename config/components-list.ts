@@ -107,4 +107,11 @@ export const componentsList: ComponentItem[] = [
     icon: 'menu',
     route: 'components/drawerExample',
   },
+  {
+    id: 'combobox',
+    name: 'Combobox',
+    description: 'A combobox component',
+    icon: 'search',
+    route: 'components/comboboxExample',
+  },
 ]; 
