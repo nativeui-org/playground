@@ -111,7 +111,7 @@ const ComboboxSearchInput = () => {
           returnKeyType="search"
         />
         <View className="absolute left-3 top-1/2 transform -translate-y-1/2">
-          <Ionicons name="search" size={20} color="#9CA3AF"a />
+          <Ionicons name="search" size={20} color="#9CA3AF" a />
         </View>
         {localValue.length > 0 && (
           <View className="absolute right-3 top-1/2 transform -translate-y-1/2">
