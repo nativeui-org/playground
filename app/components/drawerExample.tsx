@@ -195,14 +195,18 @@ export default function DrawerExampleScreen() {
   const [settingsDrawerOpen, setSettingsDrawerOpen] = React.useState(false)
   const [largeDrawerOpen, setLargeDrawerOpen] = React.useState(false)
 
-  // Memoize l'état des drawers pour éviter des re-rendus inutiles
-  const openDrawer = React.useCallback((setter: React.Dispatch<React.SetStateAction<boolean>>) => {
-    return () => setter(true)
-  }, [])
-
-  const closeDrawer = React.useCallback((setter: React.Dispatch<React.SetStateAction<boolean>>) => {
-    return () => setter(false)
-  }, [])
+  // Simplifier l'implémentation pour éviter le double-tap
+  const openBasicDrawer = React.useCallback(() => setDrawerOpen(true), [])
+  const closeBasicDrawer = React.useCallback(() => setDrawerOpen(false), [])
+  
+  const openFeedbackDrawer = React.useCallback(() => setFeedbackDrawerOpen(true), [])
+  const closeFeedbackDrawer = React.useCallback(() => setFeedbackDrawerOpen(false), [])
+  
+  const openSettingsDrawer = React.useCallback(() => setSettingsDrawerOpen(true), [])
+  const closeSettingsDrawer = React.useCallback(() => setSettingsDrawerOpen(false), [])
+  
+  const openLargeDrawer = React.useCallback(() => setLargeDrawerOpen(true), [])
+  const closeLargeDrawer = React.useCallback(() => setLargeDrawerOpen(false), [])
 
   return (
     <>
@@ -233,13 +237,13 @@ export default function DrawerExampleScreen() {
               <Text className="text-xl font-semibold mb-4 text-foreground">
                 Basic Drawer
               </Text>
-              <Button onPress={openDrawer(setDrawerOpen)}>
+              <Button onPress={openBasicDrawer}>
                 <Text className="text-primary-foreground">Open Drawer</Text>
               </Button>
 
               <Drawer
                 open={drawerOpen}
-                onClose={closeDrawer(setDrawerOpen)}
+                onClose={closeBasicDrawer}
                 title="Drawer Example"
                 snapPoints={[0.4, 0.8]}
                 initialSnapIndex={0}
@@ -264,7 +268,7 @@ export default function DrawerExampleScreen() {
               </Text>
               <Button 
                 variant="outline" 
-                onPress={openDrawer(setFeedbackDrawerOpen)}
+                onPress={openFeedbackDrawer}
                 className="bg-primary/10"
               >
                 <Ionicons name="chatbubble-outline" size={20} color="#4F46E5" style={{ marginRight: 8 }} />
@@ -275,7 +279,7 @@ export default function DrawerExampleScreen() {
 
               <Drawer
                 open={feedbackDrawerOpen}
-                onClose={closeDrawer(setFeedbackDrawerOpen)}
+                onClose={closeFeedbackDrawer}
                 title="Feedback"
                 snapPoints={[0.5, 0.9]}
                 initialSnapIndex={0}
@@ -290,7 +294,7 @@ export default function DrawerExampleScreen() {
               </Text>
               <Button 
                 variant="outline" 
-                onPress={openDrawer(setSettingsDrawerOpen)}
+                onPress={openSettingsDrawer}
                 className="justify-between"
               >
                 <View className="flex-row items-center">
@@ -304,7 +308,7 @@ export default function DrawerExampleScreen() {
 
               <Drawer
                 open={settingsDrawerOpen}
-                onClose={closeDrawer(setSettingsDrawerOpen)}
+                onClose={closeSettingsDrawer}
                 title="Settings"
                 snapPoints={[0.6, 0.9]}
                 initialSnapIndex={0}
@@ -319,14 +323,14 @@ export default function DrawerExampleScreen() {
               </Text>
               <Button 
                 variant="secondary"
-                onPress={openDrawer(setLargeDrawerOpen)}
+                onPress={openLargeDrawer}
               >
                 <Text className="text-accent-foreground">View More Information</Text>
               </Button>
 
               <Drawer
                 open={largeDrawerOpen}
-                onClose={closeDrawer(setLargeDrawerOpen)}
+                onClose={closeLargeDrawer}
                 title="Detailed Information"
                 snapPoints={[0.3, 0.7, 0.95]}
                 initialSnapIndex={1}

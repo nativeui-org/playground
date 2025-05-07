@@ -10,11 +10,9 @@ import {
   Dimensions,
   StyleSheet,
   Easing,
-  AccessibilityInfo,
-  findNodeHandle,
-  ScrollView,
+  KeyboardAvoidingView,
 } from "react-native"
-import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context"
+import { SafeAreaView } from "react-native-safe-area-context"
 import { cn } from "@/lib/utils"
 
 interface DrawerProps {
@@ -26,22 +24,16 @@ interface DrawerProps {
   initialSnapIndex?: number
   className?: string
   contentClassName?: string
-  preventClose?: boolean
-  accessibilityLabel?: string
-  accessibilityHint?: string
+  avoidKeyboard?: boolean
+  closeOnBackdropPress?: boolean
+  disableBackHandler?: boolean
 }
 
-const { height: initialScreenHeight } = Dimensions.get("window")
+const { height: SCREEN_HEIGHT } = Dimensions.get("window")
 const DEFAULT_SNAP_POINTS = [0.5, 0.9] // 0.5 = 50% of screen height, 0.9 = 90% of screen height
 
-export const DrawerContext = React.createContext<{ 
-  animateClose: () => void,
-  blockClose: () => void,
-  unblockClose: () => void,
-}>({
+export const DrawerContext = React.createContext<{ animateClose: () => void }>({
   animateClose: () => {},
-  blockClose: () => {},
-  unblockClose: () => {},
 })
 
 export const useDrawer = () => React.useContext(DrawerContext)
@@ -56,126 +48,66 @@ const Drawer = React.forwardRef<View, DrawerProps>(
     initialSnapIndex = 0,
     className,
     contentClassName,
-    preventClose = false,
-    accessibilityLabel = "Bottom drawer",
-    accessibilityHint = "Swipe up to expand, swipe down to dismiss",
+    avoidKeyboard = true,
+    closeOnBackdropPress = true,
+    disableBackHandler = false
   }, ref) => {
-    const [screenHeight, setScreenHeight] = React.useState(initialScreenHeight)
-    const [closeBlocked, setCloseBlocked] = React.useState(preventClose)
-    const [scrollEnabled, setScrollEnabled] = React.useState(true)
-    const drawerRef = React.useRef<View>(null)
-    const insets = useSafeAreaInsets()
-    
-    React.useEffect(() => {
-      const subscription = Dimensions.addEventListener(
-        "change",
-        ({ window }) => {
-          if (window.height) setScreenHeight(window.height);
-        }
-      );
-      
-      return () => subscription.remove();
-    }, []);
-    
-    const snapPointsPixels = React.useMemo(() => snapPoints.map(point => 
-      screenHeight - (screenHeight * point)
-    ), [snapPoints, screenHeight])
+    const snapPointsPixels = snapPoints.map(point => 
+      SCREEN_HEIGHT - (SCREEN_HEIGHT * point)
+    )
     
     const activeSnapIndex = React.useRef(initialSnapIndex)
-    const translateY = React.useRef(new Animated.Value(screenHeight)).current
+    const translateY = React.useRef(new Animated.Value(SCREEN_HEIGHT)).current
     const backdropOpacity = React.useRef(new Animated.Value(0)).current
     const isClosing = React.useRef(false)
-    const animationsRunning = React.useRef(0)
-    
-    const incrementAnimation = React.useCallback(() => {
-      animationsRunning.current += 1
-    }, [])
-    
-    const decrementAnimation = React.useCallback(() => {
-      animationsRunning.current = Math.max(0, animationsRunning.current - 1)
-    }, [])
-    
-    React.useEffect(() => {
-      if (open && drawerRef.current) {
-        const handle = findNodeHandle(drawerRef.current)
-        if (handle) {
-          setTimeout(() => {
-            AccessibilityInfo.setAccessibilityFocus(handle)
-          }, 500)
-        }
-      }
-    }, [open])
-    
-    const blockClose = React.useCallback(() => {
-      setCloseBlocked(true)
-    }, [])
-    
-    const unblockClose = React.useCallback(() => {
-      setCloseBlocked(false)
-    }, [])
     
     const animateOpen = React.useCallback(() => {
-      if (animationsRunning.current > 0) return
-      
-      translateY.setValue(screenHeight)
+      translateY.setValue(SCREEN_HEIGHT)
       backdropOpacity.setValue(0)
       isClosing.current = false
       
-      incrementAnimation()
       Animated.timing(backdropOpacity, {
         toValue: 1,
         duration: 180,
         useNativeDriver: true,
         easing: Easing.out(Easing.ease),
-      }).start(decrementAnimation)
+      }).start()
       
-      incrementAnimation()
       Animated.spring(translateY, {
         toValue: snapPointsPixels[initialSnapIndex],
         useNativeDriver: true,
         velocity: 3,
         tension: 120,
         friction: 22,
-      }).start(decrementAnimation)
+      }).start()
       
       activeSnapIndex.current = initialSnapIndex
-    }, [backdropOpacity, translateY, snapPointsPixels, initialSnapIndex, screenHeight, incrementAnimation, decrementAnimation])
+    }, [backdropOpacity, translateY, snapPointsPixels, initialSnapIndex])
     
     const animateClose = React.useCallback(() => {
-      if (isClosing.current || closeBlocked) return
+      if (isClosing.current) return
       
       isClosing.current = true
       
-      incrementAnimation()
       Animated.spring(translateY, {
-        toValue: screenHeight,
+        toValue: SCREEN_HEIGHT,
         useNativeDriver: true,
         friction: 26,
         tension: 100,
         velocity: 0.5,
-      }).start((result) => {
-        decrementAnimation()
-        if (result.finished && isClosing.current) {
-          onClose()
-          isClosing.current = false
-        }
-      })
+      }).start()
       
-      incrementAnimation()
       Animated.timing(backdropOpacity, {
         toValue: 0,
         duration: 280,
         easing: Easing.out(Easing.ease),
         useNativeDriver: true,
         delay: 100,
-      }).start(decrementAnimation)
-    }, [backdropOpacity, translateY, onClose, screenHeight, closeBlocked, incrementAnimation, decrementAnimation])
-    
-    React.useEffect(() => {
-      if (open) {
+      }).start(() => {
+        onClose()
         isClosing.current = false
-      }
-    }, [open])
+      })
+    }, [backdropOpacity, translateY, onClose])
     
     React.useEffect(() => {
       if (open && !isClosing.current) {
@@ -183,31 +115,25 @@ const Drawer = React.forwardRef<View, DrawerProps>(
       }
     }, [open, animateOpen])
     
+    // Ensure drawer animates close when open becomes false
     React.useEffect(() => {
       if (!open && !isClosing.current) {
         animateClose()
       }
     }, [open, animateClose])
     
-    React.useEffect(() => {
-      setCloseBlocked(preventClose)
-    }, [preventClose])
-    
     const animateToSnapPoint = (index: number, velocity = 0) => {
       if (index < 0 || index >= snapPointsPixels.length) return
       
       activeSnapIndex.current = index
       
-      incrementAnimation()
       Animated.spring(translateY, {
         toValue: snapPointsPixels[index],
         useNativeDriver: true,
         velocity: velocity,
         tension: 120,
         friction: 22,
-      }).start(decrementAnimation)
-      
-      setScrollEnabled(index === snapPointsPixels.length - 1)
+      }).start()
     }
     
     const getTargetSnapIndex = (currentY: number, velocity: number, dragDirection: 'up' | 'down') => {
@@ -248,37 +174,17 @@ const Drawer = React.forwardRef<View, DrawerProps>(
       return closestIndex
     }
     
-    const isScrollingRef = React.useRef(false);
-    
     const panResponder = React.useMemo(() => {
       let startY = 0;
       const maxDragPoint = snapPointsPixels[snapPointsPixels.length - 1];
       
       return PanResponder.create({
-        onStartShouldSetPanResponder: (_, gestureState) => {
-          return gestureState.y0 < 100;
-        },
-        onMoveShouldSetPanResponder: (_, {dy, moveY, y0}) => {
-          if (isScrollingRef.current) return false;
-          
-          if (
-            activeSnapIndex.current === snapPointsPixels.length - 1 && 
-            dy > 0 && 
-            moveY > 100
-          ) {
-            return false;
-          }
-          
-          return Math.abs(dy) > 5;
-        },
-        onMoveShouldSetPanResponderCapture: (_, {dy}) => {
-          return activeSnapIndex.current === 0 && dy > 10;
-        },
+        onStartShouldSetPanResponder: () => true,
+        onMoveShouldSetPanResponder: (_, {dy}) => Math.abs(dy) > 5,
         
         onPanResponderGrant: (_, {y0}) => {
           startY = y0;
           translateY.stopAnimation();
-          isScrollingRef.current = false;
         },
         
         onPanResponderMove: (_, {dy}) => {
@@ -287,9 +193,7 @@ const Drawer = React.forwardRef<View, DrawerProps>(
           const currentSnapY = snapPointsPixels[activeSnapIndex.current];
           let newY = currentSnapY + dy;
           
-          if (closeBlocked && newY > snapPointsPixels[0]) {
-            newY = snapPointsPixels[0];
-          } else if (newY < maxDragPoint) {
+          if (newY < maxDragPoint) {
             const overscroll = maxDragPoint - newY;
             const resistedOverscroll = -Math.log10(1 + overscroll * 0.1) * 10;
             newY = maxDragPoint + resistedOverscroll;
@@ -312,110 +216,82 @@ const Drawer = React.forwardRef<View, DrawerProps>(
           )
           
           if (targetIndex === -1) {
-            if (!closeBlocked) {
-              animateClose()
-            } else {
-              animateToSnapPoint(0)
-            }
+            animateClose()
           } else {
             animateToSnapPoint(targetIndex, vy)
           }
         },
-        
-        onPanResponderTerminationRequest: () => true,
-        onPanResponderTerminate: () => {
-          isScrollingRef.current = false;
-        },
       });
-    }, [snapPointsPixels, onClose, translateY, animateClose, closeBlocked, incrementAnimation, decrementAnimation]);
+    }, [snapPointsPixels, onClose, translateY, animateClose]);
     
-    if (!open && !isClosing.current) return null
+    if (!open) return null
+    
+    const renderContent = () => (
+      <View className="flex-1">
+        <Animated.View 
+          style={[styles.backdrop, { opacity: backdropOpacity }]}
+        >
+          {closeOnBackdropPress && (
+            <TouchableWithoutFeedback onPress={animateClose}>
+              <View style={StyleSheet.absoluteFillObject} />
+            </TouchableWithoutFeedback>
+          )}
+        </Animated.View>
+        
+        <Animated.View
+          style={[
+            styles.drawerContainer,
+            { transform: [{ translateY }] }
+          ]}
+          className={cn(
+            "absolute bottom-0 left-0 right-0 bg-popover rounded-t-xl overflow-hidden",
+            Platform.OS === "ios" ? "ios:shadow-xl" : "android:elevation-24",
+            contentClassName
+          )}
+        >
+          <View {...panResponder.panHandlers}>
+            <View className="w-full items-center py-2">
+              <View className="w-10 h-1 rounded-full bg-muted-foreground/30" />
+            </View>
+          
+            {title && (
+              <View className="px-4 pt-1 pb-3 border-b border-border">
+                <Text className="text-xl font-medium text-center text-foreground">
+                  {title}
+                </Text>
+              </View>
+            )}
+          </View>
+          
+          <SafeAreaView className="flex-1" edges={["bottom"]}>
+            <View ref={ref} className="flex-1">
+              {children}
+            </View>
+          </SafeAreaView>
+        </Animated.View>
+      </View>
+    )
     
     return (
-      <DrawerContext.Provider value={{ animateClose, blockClose, unblockClose }}>
+      <DrawerContext.Provider value={{ animateClose }}>
         <Modal
-          visible={true}
+          visible={open}
           transparent
           animationType="none"
           statusBarTranslucent
-          onRequestClose={() => {
-            if (!closeBlocked) {
-              animateClose()
-            }
-          }}
+          onRequestClose={disableBackHandler ? undefined : animateClose}
         >
-          <View className="flex-1">
-            <Animated.View 
-              style={[styles.backdrop, { opacity: backdropOpacity }]}
-              accessibilityRole="button"
-              accessibilityLabel="Close drawer"
-              accessibilityHint="Double tap to close the drawer"
+          {avoidKeyboard && Platform.OS === "ios" ? (
+            <KeyboardAvoidingView 
+              behavior="padding" 
+              style={{ flex: 1 }}
+              keyboardVerticalOffset={10}
             >
-              <TouchableWithoutFeedback 
-                onPress={() => {
-                  if (!closeBlocked) {
-                    animateClose()
-                  }
-                }}
-              >
-                <View style={StyleSheet.absoluteFillObject} />
-              </TouchableWithoutFeedback>
-            </Animated.View>
-            
-            <Animated.View
-              style={[
-                styles.drawerContainer,
-                { transform: [{ translateY }] }
-              ]}
-              className={cn(
-                "absolute bottom-0 left-0 right-0 bg-popover rounded-t-xl overflow-hidden",
-                Platform.OS === "ios" ? "ios:shadow-xl" : "android:elevation-24",
-                contentClassName
-              )}
-              ref={drawerRef}
-              accessibilityRole="adjustable"
-              accessibilityLabel={accessibilityLabel}
-              accessibilityHint={accessibilityHint}
-              accessible={true}
-              importantForAccessibility="yes"
-            >
-              <View {...panResponder.panHandlers}>
-                <View className="w-full items-center py-2">
-                  <View className="w-10 h-1 rounded-full bg-muted-foreground/30" />
-                </View>
-              
-                {title && (
-                  <View className="px-4 pt-1 pb-3 border-b border-border">
-                    <Text className="text-xl font-medium text-center text-foreground">
-                      {title}
-                    </Text>
-                  </View>
-                )}
-              </View>
-              
-              <ScrollView 
-                ref={ref as any}
-                className="flex-1"
-                scrollEnabled={scrollEnabled}
-                showsVerticalScrollIndicator={true}
-                bounces={activeSnapIndex.current === snapPointsPixels.length - 1}
-                onScrollBeginDrag={() => {
-                  isScrollingRef.current = true;
-                }}
-                onScrollEndDrag={() => {
-                  isScrollingRef.current = false;
-                }}
-              >
-                <SafeAreaView
-                  edges={['bottom', 'left', 'right']}
-                  className="flex-1"
-                  style={{ paddingBottom: Math.max(20, insets.bottom) }}
-                >
-                  {children}
-                </SafeAreaView>
-              </ScrollView>
-            </Animated.View>
-          </View>
+              {renderContent()}
+            </KeyboardAvoidingView>
+          ) : (
+            renderContent()
+          )}
         </Modal>
       </DrawerContext.Provider>
     )
@@ -428,7 +304,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.4)',
   },
   drawerContainer: {
-    height: Dimensions.get('window').height,
+    height: SCREEN_HEIGHT,
+    paddingBottom: 20,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: -3 },
     shadowOpacity: 0.15,

@@ -75,6 +75,9 @@ export default function SelectExample() {
                   <SelectItem value="hamster">Hamster</SelectItem>
                   <SelectItem value="turtle">Turtle</SelectItem>
                 </Select>
+                <Text className="text-sm mt-2 text-muted-foreground">
+                  {pet ? `Selected pet: ${pet}` : "No pet selected"}
+                </Text>
               </View>
             </View>
 
@@ -101,6 +104,9 @@ export default function SelectExample() {
                   <SelectItem value="laravel">Laravel</SelectItem>
                 </SelectGroup>
               </Select>
+              <Text className="text-sm mt-2 text-muted-foreground">
+                {framework ? `Selected framework: ${framework}` : "No framework selected"}
+              </Text>
             </View>
 
             <View className="mb-8">
@@ -119,6 +125,9 @@ export default function SelectExample() {
                 <SelectItem value="de">Germany</SelectItem>
                 <SelectItem value="jp">Japan</SelectItem>
               </Select>
+              <Text className="text-sm mt-2 text-muted-foreground">
+                {`Selected country: ${country}`}
+              </Text>
             </View>
 
             <View className="mb-8">
