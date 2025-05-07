@@ -192,7 +192,11 @@ const Select = React.forwardRef<View, SelectProps>(
           avoidKeyboard={avoidKeyboard}
           closeOnBackdropPress={true}
         >
-          <ScrollView className="px-1 pt-2 pb-6">
+          <ScrollView 
+            className="px-1 pt-2 pb-6" 
+            keyboardShouldPersistTaps="handled"
+            nestedScrollEnabled={true}
+          >
             {enhancedChildren}
           </ScrollView>
         </Drawer>

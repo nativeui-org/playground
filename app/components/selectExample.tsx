@@ -26,7 +26,11 @@ export default function SelectExample() {
           style={{ flex: 1 }}
           keyboardVerticalOffset={100}
         >
-          <ScrollView className="p-4">
+          <ScrollView 
+            className="p-4"
+            keyboardShouldPersistTaps="handled" 
+            nestedScrollEnabled={true}
+          >
             <View className="mb-6">
               <Text className="text-2xl font-bold mb-2 text-foreground">
                 Select

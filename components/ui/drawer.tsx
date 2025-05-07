@@ -52,6 +52,7 @@ const Drawer = React.forwardRef<View, DrawerProps>(
     closeOnBackdropPress = true,
     disableBackHandler = false
   }, ref) => {
+    const [isVisible, setIsVisible] = React.useState(false)
     const snapPointsPixels = snapPoints.map(point => 
       SCREEN_HEIGHT - (SCREEN_HEIGHT * point)
     )
@@ -104,23 +105,21 @@ const Drawer = React.forwardRef<View, DrawerProps>(
         useNativeDriver: true,
         delay: 100,
       }).start(() => {
-        onClose()
+        setIsVisible(false)
         isClosing.current = false
+        onClose()
       })
     }, [backdropOpacity, translateY, onClose])
     
     React.useEffect(() => {
-      if (open && !isClosing.current) {
+      if (open && !isVisible) {
+        setIsVisible(true)
+      } else if (open && !isClosing.current) {
         animateOpen()
-      }
-    }, [open, animateOpen])
-    
-    // Ensure drawer animates close when open becomes false
-    React.useEffect(() => {
-      if (!open && !isClosing.current) {
+      } else if (!open && isVisible && !isClosing.current) {
         animateClose()
       }
-    }, [open, animateClose])
+    }, [open, isVisible, animateOpen, animateClose, isClosing])
     
     const animateToSnapPoint = (index: number, velocity = 0) => {
       if (index < 0 || index >= snapPointsPixels.length) return
@@ -222,9 +221,9 @@ const Drawer = React.forwardRef<View, DrawerProps>(
           }
         },
       });
-    }, [snapPointsPixels, onClose, translateY, animateClose]);
+    }, [snapPointsPixels, animateClose]);
     
-    if (!open) return null
+    if (!isVisible) return null
     
     const renderContent = () => (
       <View className="flex-1">
@@ -275,7 +274,7 @@ const Drawer = React.forwardRef<View, DrawerProps>(
     return (
       <DrawerContext.Provider value={{ animateClose }}>
         <Modal
-          visible={open}
+          visible={isVisible}
           transparent
           animationType="none"
           statusBarTranslucent

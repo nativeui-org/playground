@@ -169,6 +169,8 @@ const ComboboxItemsList = ({
     <FlatList
       data={filteredItems}
       keyExtractor={(item) => item.value}
+      keyboardShouldPersistTaps="handled"
+      nestedScrollEnabled={true}
       renderItem={({ item }) => (
         <ComboboxItem
           value={item.value}
@@ -180,7 +182,6 @@ const ComboboxItemsList = ({
         </ComboboxItem>
       )}
       contentContainerStyle={{ paddingBottom: 20 }}
-      keyboardShouldPersistTaps="handled"
     />
   );
 };
