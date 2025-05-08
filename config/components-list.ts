@@ -114,4 +114,11 @@ export const componentsList: ComponentItem[] = [
     icon: 'search',
     route: 'components/comboboxExample',
   },
+  {
+    id: 'skeleton',
+    name: 'Skeleton',
+    description: 'A skeleton component',
+    icon: 'loader',
+    route: 'components/skeletonExample',
+  },
 ]; 
