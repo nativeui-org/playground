@@ -121,4 +121,11 @@ export const componentsList: ComponentItem[] = [
     icon: 'loader',
     route: 'components/skeletonExample',
   },
+  {
+    id: 'separator',
+    name: 'Separator',
+    description: 'A visual divider between content areas',
+    icon: 'minus',
+    route: 'components/separatorExample',
+  },
 ]; 
