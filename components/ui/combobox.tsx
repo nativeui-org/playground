@@ -53,138 +53,152 @@ interface ComboboxSeparatorProps {
   className?: string;
 }
 
-const searchState = {
-  value: "",
-  listeners: new Set<() => void>(),
-
-  setValue(newValue: string) {
-    this.value = newValue;
-    this.notifyListeners();
-  },
-
-  addListener(listener: () => void) {
-    this.listeners.add(listener);
-    return () => {
-      this.listeners.delete(listener);
-    };
-  },
-
-  notifyListeners() {
-    this.listeners.forEach((listener) => listener());
-  },
-};
-
-const ComboboxSearchInput = () => {
-  const [localValue, setLocalValue] = React.useState(searchState.value);
-  const inputRef = React.useRef<TextInput>(null);
-
-  React.useEffect(() => {
-    const unsubscribe = searchState.addListener(() => {
-      setLocalValue(searchState.value);
-    });
-    return unsubscribe;
-  }, []);
-
-  const handleChangeText = (text: string) => {
-    setLocalValue(text);
-    searchState.setValue(text);
-  };
-
-  const handleClear = () => {
-    setLocalValue("");
-    searchState.setValue("");
-    inputRef.current?.clear();
-  };
-
-  return (
-    <View className="px-4 py-2">
-      <View className="relative mb-2">
-        <Input
-          ref={inputRef}
-          placeholder="Search..."
-          placeholderTextColor="#9CA3AF"
-          className="pl-10"
-          value={localValue}
-          onChangeText={handleChangeText}
-          autoCapitalize="none"
-          autoCorrect={false}
-          returnKeyType="search"
-        />
-        <View className="absolute left-3 top-1/2 transform -translate-y-1/2">
-          <Ionicons name="search" size={20} color="#9CA3AF" a />
-        </View>
-        {localValue.length > 0 && (
-          <View className="absolute right-3 top-1/2 transform -translate-y-1/2">
-            <Pressable onPress={handleClear} hitSlop={8}>
-              <Ionicons name="close-circle" size={18} color="#9CA3AF" />
-            </Pressable>
-          </View>
-        )}
-      </View>
-    </View>
-  );
-};
-
-const ComboboxItemsList = ({
-  items,
-  selectedValue,
-  onSelect,
-  filter,
-  emptyText,
-}: {
-  items: ComboboxProps["items"];
+interface ComboboxContextValue {
+  searchValue: string;
+  setSearchValue: (value: string) => void;
   selectedValue?: string;
   onSelect: (value: string) => void;
+  items: ComboboxProps["items"];
   filter: (value: string, search: string) => boolean;
   emptyText: string;
-}) => {
-  const [filteredItems, setFilteredItems] = React.useState(items);
+}
 
-  React.useEffect(() => {
-    const updateFilter = () => {
-      if (!searchState.value) {
+const ComboboxContext = React.createContext<ComboboxContextValue | undefined>(
+  undefined
+);
+
+const useComboboxContext = () => {
+  const context = React.useContext(ComboboxContext);
+  if (!context) {
+    throw new Error("useComboboxContext must be used within a ComboboxProvider");
+  }
+  return context;
+};
+
+const DrawerContent = React.memo(
+  ({
+    items,
+    selectedValue,
+    onSelect,
+    customFilter,
+    emptyText,
+    placeholder,
+    isOpen
+  }: {
+    items: ComboboxProps["items"];
+    selectedValue?: string;
+    onSelect: (value: string) => void;
+    customFilter?: (value: string, search: string) => boolean;
+    emptyText: string;
+    placeholder: string;
+    isOpen: boolean;
+  }) => {
+    const [searchValue, setSearchValue] = React.useState("");
+    const [filteredItems, setFilteredItems] = React.useState(items);
+    const inputRef = React.useRef<TextInput>(null);
+    const drawer = useDrawer();
+    const prevIsOpenRef = React.useRef(isOpen);
+
+    const defaultFilter = React.useCallback(
+      (itemValue: string, search: string) => {
+        const label =
+          items.find((item) => item.value === itemValue)?.label || "";
+        return label.toLowerCase().includes(search.toLowerCase());
+      },
+      [items]
+    );
+
+    const filter = customFilter || defaultFilter;
+
+    React.useEffect(() => {
+      if (!searchValue) {
         setFilteredItems(items);
       } else {
         setFilteredItems(
-          items.filter((item) => filter(item.value, searchState.value))
+          items.filter((item) => filter(item.value, searchValue))
         );
       }
+    }, [items, filter, searchValue]);
+
+    const handleChangeText = (text: string) => {
+      setSearchValue(text);
     };
 
-    updateFilter();
+    const handleClear = () => {
+      setSearchValue("");
+      inputRef.current?.clear();
+    };
 
-    const unsubscribe = searchState.addListener(updateFilter);
-    return unsubscribe;
-  }, [items, filter]);
+    const handleItemSelect = (value: string, label: React.ReactNode) => {
+      onSelect(value);
+      drawer.animateClose();
+    };
 
-  if (filteredItems.length === 0) {
+    React.useEffect(() => {
+      if (prevIsOpenRef.current && !isOpen) {
+        setSearchValue("");
+      }
+      
+      prevIsOpenRef.current = isOpen;
+    }, [isOpen]);
+
     return (
-      <View className="p-4 items-center justify-center">
-        <Text className="text-muted-foreground text-base">{emptyText}</Text>
-      </View>
+      <>
+        <View className="px-4 py-2">
+          <View className="relative mb-2">
+            <Input
+              ref={inputRef}
+              placeholder="Search..."
+              placeholderTextColor="#9CA3AF"
+              className="pl-10"
+              value={searchValue}
+              onChangeText={handleChangeText}
+              autoCapitalize="none"
+              autoCorrect={false}
+              returnKeyType="search"
+            />
+            <View className="absolute left-3 top-1/2 transform -translate-y-1/2">
+              <Ionicons name="search" size={20} color="#9CA3AF" />
+            </View>
+            {searchValue.length > 0 && (
+              <View className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                <Pressable onPress={handleClear} hitSlop={8}>
+                  <Ionicons name="close-circle" size={18} color="#9CA3AF" />
+                </Pressable>
+              </View>
+            )}
+          </View>
+        </View>
+
+        {filteredItems.length === 0 ? (
+          <View className="p-4 items-center justify-center">
+            <Text className="text-muted-foreground text-base">{emptyText}</Text>
+          </View>
+        ) : (
+          <FlatList
+            data={filteredItems}
+            keyExtractor={(item) => item.value}
+            keyboardShouldPersistTaps="handled"
+            nestedScrollEnabled={true}
+            renderItem={({ item }) => (
+              <ComboboxItem
+                value={item.value}
+                disabled={item.disabled}
+                selectedValue={selectedValue}
+                onSelect={handleItemSelect}
+              >
+                {item.label}
+              </ComboboxItem>
+            )}
+            contentContainerStyle={{ paddingBottom: 20 }}
+          />
+        )}
+      </>
     );
   }
+);
 
-  return (
-    <FlatList
-      data={filteredItems}
-      keyExtractor={(item) => item.value}
-      keyboardShouldPersistTaps="handled"
-      nestedScrollEnabled={true}
-      renderItem={({ item }) => (
-        <ComboboxItem
-          value={item.value}
-          disabled={item.disabled}
-          selectedValue={selectedValue}
-          onSelect={onSelect}
-        >
-          {item.label}
-        </ComboboxItem>
-      )}
-      contentContainerStyle={{ paddingBottom: 20 }}
-    />
-  );
-};
+DrawerContent.displayName = "DrawerContent";
 
 const Combobox = React.forwardRef<View, ComboboxProps>(
   (
@@ -207,27 +221,8 @@ const Combobox = React.forwardRef<View, ComboboxProps>(
     const [selectedValue, setSelectedValue] = React.useState(value);
 
     React.useEffect(() => {
-      if (!isOpen) {
-        setTimeout(() => {
-          searchState.setValue("");
-        }, 100);
-      }
-    }, [isOpen]);
-
-    React.useEffect(() => {
       setSelectedValue(value);
     }, [value]);
-
-    const defaultFilter = React.useCallback(
-      (itemValue: string, search: string) => {
-        const label =
-          items.find((item) => item.value === itemValue)?.label || "";
-        return label.toLowerCase().includes(search.toLowerCase());
-      },
-      [items]
-    );
-
-    const filterFn = filter || defaultFilter;
 
     const selectedLabel = React.useMemo(() => {
       if (!selectedValue) return "";
@@ -242,6 +237,19 @@ const Combobox = React.forwardRef<View, ComboboxProps>(
         }
       },
       [onValueChange]
+    );
+
+    const drawerContentProps = React.useMemo(
+      () => ({
+        items,
+        selectedValue,
+        onSelect: handleSelect,
+        customFilter: filter,
+        emptyText,
+        placeholder,
+        isOpen,
+      }),
+      [items, selectedValue, handleSelect, filter, emptyText, placeholder, isOpen]
     );
 
     return (
@@ -287,14 +295,7 @@ const Combobox = React.forwardRef<View, ComboboxProps>(
           initialSnapIndex={0}
           contentClassName={contentClassName}
         >
-          <ComboboxSearchInput />
-          <ComboboxItemsList
-            items={items}
-            selectedValue={selectedValue}
-            onSelect={handleSelect}
-            filter={filterFn}
-            emptyText={emptyText}
-          />
+          <DrawerContent {...drawerContentProps} />
         </Drawer>
       </View>
     );
@@ -321,7 +322,6 @@ const ComboboxItem = React.forwardRef<typeof Pressable, ComboboxItemProps>(
     ref
   ) => {
     const isSelected = selectedValue === value;
-    const drawer = useDrawer();
 
     return (
       <Pressable
@@ -331,7 +331,6 @@ const ComboboxItem = React.forwardRef<typeof Pressable, ComboboxItemProps>(
           if (onSelect) {
             onSelect(value, children);
           }
-          drawer.animateClose();
         }}
         className={cn(
           "flex-row h-14 items-center justify-between px-4 py-2 active:bg-accent/50",

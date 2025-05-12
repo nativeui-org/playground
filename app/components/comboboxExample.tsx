@@ -3,7 +3,7 @@ import { View, Text, ScrollView, KeyboardAvoidingView, Platform } from "react-na
 import { Stack } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ThemeToggle } from "@/components/ui";
-import { Combobox, ComboboxGroup, ComboboxItem, ComboboxLabel, ComboboxSeparator } from "@/components/ui/combobox";
+import { Combobox } from "@/components/ui/combobox";
 
 export default function ComboboxExample() {
   const [fruit, setFruit] = React.useState<string>("");
