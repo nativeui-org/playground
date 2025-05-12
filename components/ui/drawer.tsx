@@ -47,21 +47,18 @@ const DRAG = {
   RESISTANCE: 0.1,
 };
 
-// Drawer sizes - Définition directe des presets de snap points
+// Drawer sizes - Definition of preset snap points
 const DRAWER_SIZES = {
-  SMALL: [0.3, 0.5], // Petit drawer pouvant être étendu à 50%
-  MEDIUM: [0.5, 0.8], // Drawer moyen pouvant être étendu à 80%
-  LARGE: [0.6, 0.8, 0.95], // Grand drawer avec options de taille
-  FULL: [0.8, 0.95], // Plein écran avec option réduite
+  SMALL: [0.3, 0.5], // Small drawer that can be extended to 50%
+  MEDIUM: [0.5, 0.8], // Medium drawer that can be extended to 80%
+  LARGE: [0.6, 0.8, 0.95], // Large drawer with size options
+  FULL: [0.8, 0.95], // Full screen with reduced option
 };
 
-// Screen dimensions
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 
-// Type for preset drawer sizes
 export type DrawerSize = "small" | "medium" | "large" | "full" | number[];
 
-// Helper function to resolve drawer size to snap points
 const resolveSnapPoints = (size: DrawerSize): number[] => {
   if (Array.isArray(size)) return size;
 
