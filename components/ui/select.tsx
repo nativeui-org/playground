@@ -1,51 +1,54 @@
-import * as React from "react"
-import {
-  View,
-  Text,
-  Pressable,
-  ScrollView,
-  Platform,
-} from "react-native"
-import { Ionicons } from "@expo/vector-icons"
-import { cn } from "@/lib/utils"
-import { Drawer, useDrawer } from "@/components/ui/drawer"
+import * as React from "react";
+import { View, Text, Pressable, ScrollView, Platform } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { cn } from "@/lib/utils";
+import { Drawer, useDrawer } from "@/components/ui/drawer";
 
 interface SelectProps {
-  value?: string
-  onValueChange?: (value: string) => void
-  placeholder?: string
-  disabled?: boolean
-  className?: string
-  triggerClassName?: string
-  contentClassName?: string
-  snapPoints?: number[]
-  initialSnapIndex?: number
-  avoidKeyboard?: boolean
-  children: React.ReactNode
+  value?: string;
+  onValueChange?: (value: string) => void;
+  placeholder?: string;
+  disabled?: boolean;
+  className?: string;
+  triggerClassName?: string;
+  contentClassName?: string;
+  size?: "small" | "medium" | "large" | "full" | number[];
+  initialSnapIndex?: number;
+  avoidKeyboard?: boolean;
+  children: React.ReactNode;
 }
 
 interface SelectItemProps {
-  value: string
-  children: React.ReactNode
-  disabled?: boolean
-  className?: string
-  onSelect?: (value: string, label: React.ReactNode) => void
-  selectedValue?: string
+  value: string;
+  children: React.ReactNode;
+  disabled?: boolean;
+  className?: string;
+  selectedValue?: string;
 }
 
 interface SelectLabelProps {
-  children: React.ReactNode
-  className?: string
+  children: React.ReactNode;
+  className?: string;
 }
 
 interface SelectGroupProps {
-  children: React.ReactNode
-  className?: string
+  children: React.ReactNode;
+  className?: string;
 }
 
 interface SelectSeparatorProps {
-  className?: string
+  className?: string;
 }
+
+interface SelectContextValue {
+  selectedValue?: string;
+  onSelect: (value: string, label: React.ReactNode) => void;
+}
+
+const SelectContext = React.createContext<SelectContextValue>({
+  selectedValue: undefined,
+  onSelect: () => {},
+});
 
 const Select = React.forwardRef<View, SelectProps>(
   (
@@ -57,97 +60,75 @@ const Select = React.forwardRef<View, SelectProps>(
       className,
       triggerClassName,
       contentClassName,
-      snapPoints = [0.5, 0.8],
+      size = "medium",
       initialSnapIndex = 0,
       avoidKeyboard = true,
       children,
     },
     ref
   ) => {
-    const [open, setOpen] = React.useState(false)
-    const [selectedValue, setSelectedValue] = React.useState(value)
-    const [selectedLabel, setSelectedLabel] = React.useState<React.ReactNode>("")
+    const [open, setOpen] = React.useState(false);
+    const [selectedValue, setSelectedValue] = React.useState(value);
+    const [selectedLabel, setSelectedLabel] =
+      React.useState<React.ReactNode>("");
 
     React.useEffect(() => {
-      setSelectedValue(value)
-    }, [value])
-
+      if (value !== selectedValue) {
+        setSelectedValue(value);
+      }
+    }, [value, selectedValue]);
     React.useEffect(() => {
-      if (selectedValue === undefined) return
-      
-      let found = false
-      
+      if (selectedValue === undefined) return;
+
+      let found = false;
+
       const findLabel = (child: React.ReactNode) => {
-        if (!React.isValidElement(child)) return
-        
-        const childElement = child as React.ReactElement<any>
-        
-        if (childElement.type === SelectItem && childElement.props.value === selectedValue) {
-          setSelectedLabel(childElement.props.children)
-          found = true
-          return
+        if (!React.isValidElement(child)) return;
+
+        const childElement = child as React.ReactElement<any>;
+
+        if (
+          childElement.type === SelectItem &&
+          childElement.props.value === selectedValue
+        ) {
+          setSelectedLabel(childElement.props.children);
+          found = true;
+          return;
         }
-        
+
         if (childElement.type === SelectGroup) {
-          React.Children.forEach(childElement.props.children, findLabel)
+          React.Children.forEach(childElement.props.children, findLabel);
         }
-      }
-      
-      React.Children.forEach(children, findLabel)
-      
+      };
+
+      React.Children.forEach(children, findLabel);
+
       if (!found) {
-        setSelectedLabel("")
+        setSelectedLabel("");
       }
-    }, [selectedValue, children])
+    }, [selectedValue, children]);
 
-    const handleSelect = (value: string, label: React.ReactNode) => {
-      if (onValueChange) {
-        onValueChange(value)
-      }
-      
-      if (!onValueChange) {
-        setSelectedValue(value)
-        setSelectedLabel(label)
-      }
-      
-      setTimeout(() => {
-        setOpen(false)
-      }, 300)
-    }
+    const handleSelect = React.useCallback(
+      (value: string, label: React.ReactNode) => {
+        setSelectedValue(value);
+        setSelectedLabel(label);
 
-    const enhancedChildren = React.Children.map(children, (child) => {
-      if (!React.isValidElement(child)) return child
+        if (onValueChange) {
+          onValueChange(value);
+        }
 
-      const childElement = child as React.ReactElement<any>
+        setOpen(false);
+      },
+      [onValueChange]
+    );
 
-      if (childElement.type === SelectItem) {
-        return React.cloneElement(childElement, {
-          onSelect: handleSelect,
-          selectedValue,
-        })
-      }
-
-      if (childElement.type === SelectGroup) {
-        const groupChildren = React.Children.map(
-          childElement.props.children,
-          (groupChild) => {
-            if (
-              React.isValidElement(groupChild) && 
-              (groupChild as React.ReactElement<any>).type === SelectItem
-            ) {
-              return React.cloneElement(groupChild as React.ReactElement<any>, {
-                onSelect: handleSelect,
-                selectedValue,
-              })
-            }
-            return groupChild
-          }
-        )
-        return React.cloneElement(childElement, {}, groupChildren)
-      }
-
-      return child
-    })
+    const contextValue = React.useMemo(
+      () => ({
+        selectedValue,
+        onSelect: handleSelect,
+      }),
+      [selectedValue, handleSelect]
+    );
 
     return (
       <View ref={ref} className={cn("w-full", className)}>
@@ -159,7 +140,9 @@ const Select = React.forwardRef<View, SelectProps>(
             "shadow-sm",
             "active:opacity-70",
             disabled && "opacity-50",
-            Platform.OS === "ios" ? "ios:shadow-sm ios:shadow-foreground/10" : "android:elevation-1",
+            Platform.OS === "ios"
+              ? "ios:shadow-sm ios:shadow-foreground/10"
+              : "android:elevation-1",
             triggerClassName
           )}
         >
@@ -171,7 +154,9 @@ const Select = React.forwardRef<View, SelectProps>(
             )}
             numberOfLines={1}
           >
-            {selectedValue ? selectedLabel : placeholder || "Select an option"}
+            {selectedValue && selectedLabel
+              ? selectedLabel
+              : placeholder || "Select an option"}
           </Text>
 
           <Ionicons
@@ -182,30 +167,32 @@ const Select = React.forwardRef<View, SelectProps>(
           />
         </Pressable>
 
-        <Drawer
-          open={open}
-          onClose={() => setOpen(false)}
-          title={placeholder || "Select an option"}
-          snapPoints={snapPoints}
-          initialSnapIndex={initialSnapIndex}
-          contentClassName={contentClassName}
-          avoidKeyboard={avoidKeyboard}
-          closeOnBackdropPress={true}
-        >
-          <ScrollView 
-            className="px-1 pt-2 pb-6" 
-            keyboardShouldPersistTaps="handled"
-            nestedScrollEnabled={true}
+        <SelectContext.Provider value={contextValue}>
+          <Drawer
+            open={open}
+            onClose={() => setOpen(false)}
+            title={placeholder || "Select an option"}
+            size={size}
+            initialSnapIndex={initialSnapIndex}
+            contentClassName={contentClassName}
+            avoidKeyboard={avoidKeyboard}
+            closeOnBackdropPress={true}
           >
-            {enhancedChildren}
-          </ScrollView>
-        </Drawer>
+            <ScrollView
+              className="px-1 pt-2 pb-6"
+              keyboardShouldPersistTaps="handled"
+              nestedScrollEnabled={true}
+            >
+              {children}
+            </ScrollView>
+          </Drawer>
+        </SelectContext.Provider>
       </View>
-    )
+    );
   }
-)
+);
 
-Select.displayName = "Select"
+Select.displayName = "Select";
 
 const SelectGroup = React.forwardRef<View, SelectGroupProps>(
   ({ className, children, ...props }, ref) => {
@@ -213,28 +200,35 @@ const SelectGroup = React.forwardRef<View, SelectGroupProps>(
       <View ref={ref} className={cn("", className)} {...props}>
         {children}
       </View>
-    )
+    );
   }
-)
+);
 
-SelectGroup.displayName = "SelectGroup"
+SelectGroup.displayName = "SelectGroup";
 
 const SelectItem = React.forwardRef<typeof Pressable, SelectItemProps>(
-  ({ className, children, value, disabled, onSelect, selectedValue, ...props }, ref) => {
-    const isSelected = selectedValue === value
-    const drawer = useDrawer()
+  ({ className, children, value, disabled, ...props }, ref) => {
+    const { selectedValue, onSelect } = React.useContext(SelectContext);
+    const isSelected = selectedValue === value;
+    const drawer = useDrawer();
+
+    const handlePress = React.useCallback(() => {
+      if (disabled) return;
+
+      onSelect(value, children);
+
+      setTimeout(() => {
+        if (drawer && typeof drawer.close === "function") {
+          drawer.close();
+        }
+      }, 50);
+    }, [onSelect, value, children, disabled, drawer]);
 
     return (
       <Pressable
         ref={ref as any}
         disabled={disabled}
-        onPress={() => {
-          if (onSelect) {
-            onSelect(value, children)
-          }
-          
-          drawer.animateClose()
-        }}
+        onPress={handlePress}
         className={cn(
           "flex-row h-14 items-center justify-between px-4 py-2 active:bg-accent/50",
           isSelected ? "bg-accent" : "",
@@ -243,35 +237,43 @@ const SelectItem = React.forwardRef<typeof Pressable, SelectItemProps>(
         )}
         {...props}
       >
-        <Text className={cn("text-base", isSelected ? "text-accent-foreground font-medium" : "text-foreground")}>
+        <Text
+          className={cn(
+            "text-base",
+            isSelected
+              ? "text-accent-foreground font-medium"
+              : "text-foreground"
+          )}
+        >
           {children}
         </Text>
 
-        {isSelected && (
-          <Ionicons name="checkmark" size={20} color="#4F46E5" />
-        )}
+        {isSelected && <Ionicons name="checkmark" size={20} color="#4F46E5" />}
       </Pressable>
-    )
+    );
   }
-)
+);
 
-SelectItem.displayName = "SelectItem"
+SelectItem.displayName = "SelectItem";
 
 const SelectLabel = React.forwardRef<Text, SelectLabelProps>(
   ({ className, children, ...props }, ref) => {
     return (
       <Text
         ref={ref}
-        className={cn("px-3 py-2 text-sm font-semibold text-foreground", className)}
+        className={cn(
+          "px-3 py-2 text-sm font-semibold text-foreground",
+          className
+        )}
         {...props}
       >
         {children}
       </Text>
-    )
+    );
   }
-)
+);
 
-SelectLabel.displayName = "SelectLabel"
+SelectLabel.displayName = "SelectLabel";
 
 const SelectSeparator = React.forwardRef<View, SelectSeparatorProps>(
   ({ className, ...props }, ref) => {
@@ -281,16 +283,10 @@ const SelectSeparator = React.forwardRef<View, SelectSeparatorProps>(
         className={cn("h-px bg-muted mx-2 my-1", className)}
         {...props}
       />
-    )
+    );
   }
-)
+);
 
-SelectSeparator.displayName = "SelectSeparator"
+SelectSeparator.displayName = "SelectSeparator";
 
-export {
-  Select,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectSeparator,
-}
+export { Select, SelectGroup, SelectItem, SelectLabel, SelectSeparator };

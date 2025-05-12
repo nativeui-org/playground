@@ -3,14 +3,15 @@ import { View, Text, ScrollView, KeyboardAvoidingView, Platform } from "react-na
 import { Stack } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ThemeToggle } from "@/components/ui";
-import { Combobox } from "@/components/ui/combobox";
+import { Combobox, ComboboxGroup, ComboboxItem, ComboboxLabel, ComboboxSeparator } from "@/components/ui/combobox";
 
 export default function ComboboxExample() {
   const [fruit, setFruit] = React.useState<string>("");
   const [pet, setPet] = React.useState<string>("");
   const [country, setCountry] = React.useState<string>("fr");
   const [framework, setFramework] = React.useState<string>("");
-  const [searchQuery, setSearchQuery] = React.useState<string>("");
+  const [selectedLanguages, setSelectedLanguages] = React.useState<string[]>([]);
+  const [selectedColors, setSelectedColors] = React.useState<string[]>(["red", "blue"]);
 
   // Sample data for comboboxes
   const fruits = [
@@ -68,6 +69,36 @@ export default function ComboboxExample() {
   // Combined frameworks
   const allFrameworks = [...frontendFrameworks, ...backendFrameworks];
 
+  // Programming languages for multiple selection
+  const programmingLanguages = [
+    { value: "javascript", label: "JavaScript" },
+    { value: "typescript", label: "TypeScript" },
+    { value: "python", label: "Python" },
+    { value: "java", label: "Java" },
+    { value: "csharp", label: "C#" },
+    { value: "cpp", label: "C++" },
+    { value: "rust", label: "Rust" },
+    { value: "go", label: "Go" },
+    { value: "ruby", label: "Ruby" },
+    { value: "php", label: "PHP" },
+    { value: "swift", label: "Swift" },
+    { value: "kotlin", label: "Kotlin" },
+  ];
+
+  // Colors for multiple selection with default values
+  const colors = [
+    { value: "red", label: "Red" },
+    { value: "blue", label: "Blue" },
+    { value: "green", label: "Green" },
+    { value: "yellow", label: "Yellow" },
+    { value: "purple", label: "Purple" },
+    { value: "orange", label: "Orange" },
+    { value: "pink", label: "Pink" },
+    { value: "brown", label: "Brown" },
+    { value: "black", label: "Black" },
+    { value: "white", label: "White" },
+  ];
+
   return (
     <>
       <Stack.Screen
@@ -105,11 +136,51 @@ export default function ComboboxExample() {
                 placeholder="Select a fruit"
                 searchPlaceholder="Search fruits..."
                 value={fruit}
-                onValueChange={setFruit}
+                onValueChange={(value) => setFruit(value as string)}
                 items={fruits}
               />
               <Text className="text-sm mt-2 text-muted-foreground">
                 {fruit ? `You selected: ${fruit}` : "No fruit selected"}
+              </Text>
+            </View>
+
+            <View className="mb-8">
+              <Text className="text-xl font-semibold mb-4 text-foreground">
+                Multiple Selection
+              </Text>
+              <Combobox
+                placeholder="Select programming languages"
+                searchPlaceholder="Search languages..."
+                value={selectedLanguages}
+                onValueChange={(value) => setSelectedLanguages(value as string[])}
+                items={programmingLanguages}
+                multiple={true}
+              />
+              <Text className="text-sm mt-2 text-muted-foreground">
+                {selectedLanguages.length > 0 
+                  ? `Selected: ${selectedLanguages.map(lang => 
+                      programmingLanguages.find(l => l.value === lang)?.label).join(', ')}`
+                  : "No languages selected"}
+              </Text>
+            </View>
+
+            <View className="mb-8">
+              <Text className="text-xl font-semibold mb-4 text-foreground">
+                Multiple Selection with Default Values
+              </Text>
+              <Combobox
+                placeholder="Select colors"
+                searchPlaceholder="Search colors..."
+                value={selectedColors}
+                onValueChange={(value) => setSelectedColors(value as string[])}
+                items={colors}
+                multiple={true}
+              />
+              <Text className="text-sm mt-2 text-muted-foreground">
+                {selectedColors.length > 0 
+                  ? `Selected: ${selectedColors.map(color => 
+                      colors.find(c => c.value === color)?.label).join(', ')}`
+                  : "No colors selected"}
               </Text>
             </View>
 
@@ -125,7 +196,7 @@ export default function ComboboxExample() {
                   placeholder="Select a pet"
                   searchPlaceholder="Search pets..."
                   value={pet}
-                  onValueChange={setPet}
+                  onValueChange={(value) => setPet(value as string)}
                   items={pets}
                 />
               </View>
@@ -139,7 +210,7 @@ export default function ComboboxExample() {
                 placeholder="Select a country"
                 searchPlaceholder="Search countries..."
                 value={country}
-                onValueChange={setCountry}
+                onValueChange={(value) => setCountry(value as string)}
                 items={countries}
               />
             </View>
@@ -152,12 +223,9 @@ export default function ComboboxExample() {
                 placeholder="Select a framework"
                 searchPlaceholder="Search frameworks..."
                 value={framework}
-                onValueChange={setFramework}
+                onValueChange={(value) => setFramework(value as string)}
                 items={allFrameworks}
-                filter={(value, search) => {
-                  const item = allFrameworks.find(f => f.value === value);
-                  if (!item) return false;
-                  
+                filter={(item, search) => {
                   // Check if search term is in the label or value
                   return (
                     item.label.toLowerCase().includes(search.toLowerCase()) ||

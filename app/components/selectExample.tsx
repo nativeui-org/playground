@@ -48,6 +48,7 @@ export default function SelectExample() {
                 placeholder="Select a fruit"
                 value={fruit}
                 onValueChange={setFruit}
+                size="medium"
               >
                 <SelectItem value="apple">Apple</SelectItem>
                 <SelectItem value="banana">Banana</SelectItem>
@@ -72,6 +73,7 @@ export default function SelectExample() {
                   placeholder="Select a pet"
                   value={pet}
                   onValueChange={setPet}
+                  size="medium"
                 >
                   <SelectItem value="dog">Dog</SelectItem>
                   <SelectItem value="cat">Cat</SelectItem>
@@ -93,6 +95,7 @@ export default function SelectExample() {
                 placeholder="Select a framework"
                 value={framework}
                 onValueChange={setFramework}
+                size="large"
               >
                 <SelectLabel>Frontend</SelectLabel>
                 <SelectGroup>
@@ -121,6 +124,7 @@ export default function SelectExample() {
                 placeholder="Select a country"
                 value={country}
                 onValueChange={setCountry}
+                size="medium"
               >
                 <SelectItem value="us">United States</SelectItem>
                 <SelectItem value="ca">Canada</SelectItem>
@@ -141,6 +145,7 @@ export default function SelectExample() {
               <Select
                 placeholder="Select an option"
                 disabled={true}
+                size="medium"
               >
                 <SelectItem value="option1">Option 1</SelectItem>
                 <SelectItem value="option2">Option 2</SelectItem>
@@ -155,6 +160,7 @@ export default function SelectExample() {
               <Select
                 placeholder="Select a day"
                 onValueChange={(value) => console.log(value)}
+                size="medium"
               >
                 <SelectItem value="monday">Monday</SelectItem>
                 <SelectItem value="tuesday">Tuesday</SelectItem>
