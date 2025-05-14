@@ -177,4 +177,11 @@ export const componentsList: ComponentItem[] = [
     icon: 'alert-circle',
     route: 'components/alertExample',
   },
+  {
+    id: 'tooltip',
+    name: 'Tooltip',
+    description: 'A tooltip component',
+    icon: 'info',
+    route: 'components/tooltipExample',
+  },
 ]; 
