@@ -37,7 +37,9 @@ const TabsContext = React.createContext<{
 
 const Tabs = React.forwardRef<View, TabsProps>(
   ({ defaultValue, value, onValueChange, children, className }, ref) => {
-    const [selectedValue, setSelectedValue] = React.useState(value || defaultValue || "");
+    const [selectedValue, setSelectedValue] = React.useState(
+      value || defaultValue || ""
+    );
 
     const handleValueChange = React.useCallback(
       (newValue: string) => {
@@ -81,7 +83,8 @@ const TabsList = React.forwardRef<View, TabsListProps>(
 
 const TabsTrigger = React.forwardRef<View, TabsTriggerProps>(
   ({ value, children, className }, ref) => {
-    const { value: selectedValue, onValueChange } = React.useContext(TabsContext);
+    const { value: selectedValue, onValueChange } =
+      React.useContext(TabsContext);
     const isSelected = selectedValue === value;
 
     return (
@@ -91,18 +94,14 @@ const TabsTrigger = React.forwardRef<View, TabsTriggerProps>(
         className={cn(
           "flex-1 items-center justify-center rounded-lg px-4 py-2",
           Platform.OS === "ios" ? "h-10" : "h-12",
-          isSelected
-            ? "bg-background"
-            : "bg-transparent",
+          isSelected ? "bg-background" : "bg-transparent",
           className
         )}
       >
         <Text
           className={cn(
             "text-base font-medium",
-            isSelected
-              ? "text-foreground"
-              : "text-muted-foreground"
+            isSelected ? "text-foreground" : "text-muted-foreground"
           )}
         >
           {children}
@@ -120,10 +119,7 @@ const TabsContent = React.forwardRef<View, TabsContentProps>(
     if (!isSelected) return null;
 
     return (
-      <View
-        ref={ref}
-        className={cn("mt-4", className)}
-      >
+      <View ref={ref} className={cn("mt-4", className)}>
         {children}
       </View>
     );
