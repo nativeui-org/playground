@@ -135,4 +135,11 @@ export const componentsList: ComponentItem[] = [
     icon: 'layout',
     route: 'components/sheetExample',
   },
+  {
+    id: 'tabs',
+    name: 'Tabs',
+    description: 'A tabs component',
+    icon: 'layout',
+    route: 'components/tabsExample',
+  },
 ]; 
