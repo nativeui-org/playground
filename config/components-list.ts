@@ -149,4 +149,11 @@ export const componentsList: ComponentItem[] = [
     icon: 'bold',
     route: 'components/toggleExample',
   },
+  {
+    id: 'toggleGroup',
+    name: 'Toggle Group',
+    description: 'A toggle group component',
+    icon: 'bold',
+    route: 'components/toggleGroupExample',
+  },
 ]; 
