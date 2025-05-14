@@ -139,7 +139,14 @@ export const componentsList: ComponentItem[] = [
     id: 'tabs',
     name: 'Tabs',
     description: 'A tabs component',
-    icon: 'layout',
+    icon: 'menu',
     route: 'components/tabsExample',
+  },
+  {
+    id: 'toggle',
+    name: 'Toggle',
+    description: 'A toggle component',
+    icon: 'bold',
+    route: 'components/toggleExample',
   },
 ]; 
