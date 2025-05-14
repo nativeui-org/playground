@@ -170,4 +170,11 @@ export const componentsList: ComponentItem[] = [
     icon: 'chevron-left',
     route: 'components/paginationExample',
   },
+  {
+    id: 'alert',
+    name: 'Alert',
+    description: 'A alert component',
+    icon: 'alert-circle',
+    route: 'components/alertExample',
+  },
 ]; 
