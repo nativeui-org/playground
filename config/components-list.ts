@@ -128,4 +128,11 @@ export const componentsList: ComponentItem[] = [
     icon: 'minus',
     route: 'components/separatorExample',
   },
+  {
+    id: 'sheet',
+    name: 'Sheet',
+    description: 'A sheet component',
+    icon: 'layout',
+    route: 'components/sheetExample',
+  },
 ]; 
