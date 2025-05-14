@@ -156,4 +156,11 @@ export const componentsList: ComponentItem[] = [
     icon: 'bold',
     route: 'components/toggleGroupExample',
   },
+  {
+    id: 'progress',
+    name: 'Progress',
+    description: 'A progress component',
+    icon: 'loader',
+    route: 'components/progressExample',
+  },
 ]; 
