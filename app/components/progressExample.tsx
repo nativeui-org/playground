@@ -1,5 +1,6 @@
 import * as React from "react";
-import { View, Text, ScrollView, Button, Pressable } from "react-native";
+import { View, Text, ScrollView } from "react-native";
+import { Button } from "@/components/ui/button";
 import { Stack } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ThemeToggle } from "@/components/ui";
@@ -9,12 +10,12 @@ export default function ProgressExampleScreen() {
   const [demoProgress, setDemoProgress] = React.useState(13);
 
   const [autoCycleProgress, setAutoCycleProgress] = React.useState(0);
-  
+
   React.useEffect(() => {
     const timer = setTimeout(() => setDemoProgress(66), 1500);
     return () => clearTimeout(timer);
   }, []);
-  
+
   React.useEffect(() => {
     const timer = setInterval(() => {
       setAutoCycleProgress((prev) => {
@@ -22,7 +23,7 @@ export default function ProgressExampleScreen() {
         return prev + 20;
       });
     }, 2000);
-    
+
     return () => clearInterval(timer);
   }, []);
 
@@ -55,15 +56,15 @@ export default function ProgressExampleScreen() {
                 Changes from 13% to 66% after 1.5 seconds
               </Text>
               <Progress value={demoProgress} className="w-[60%]" />
-              <Pressable 
-                className="bg-primary py-2 px-4 rounded-md" 
+              <Button
+                className="mt-4"
                 onPress={() => {
                   setDemoProgress(13);
                   setTimeout(() => setDemoProgress(66), 1500);
                 }}
               >
-                <Text className="text-primary-foreground text-center">Restart Demo</Text>
-              </Pressable>
+                <Text className="text-primary-foreground">Restart Demo</Text>
+              </Button>
             </View>
           </View>
 
@@ -109,19 +110,27 @@ export default function ProgressExampleScreen() {
             </Text>
             <View className="space-y-6">
               <View className="space-y-2">
-                <Text className="text-sm text-muted-foreground">Small (h-2)</Text>
+                <Text className="text-sm text-muted-foreground">
+                  Small (h-2)
+                </Text>
                 <Progress value={50} className="h-2" />
               </View>
               <View className="space-y-2">
-                <Text className="text-sm text-muted-foreground">Medium (h-3) - Default</Text>
+                <Text className="text-sm text-muted-foreground">
+                  Medium (h-3) - Default
+                </Text>
                 <Progress value={50} />
               </View>
               <View className="space-y-2">
-                <Text className="text-sm text-muted-foreground">Large (h-4)</Text>
+                <Text className="text-sm text-muted-foreground">
+                  Large (h-4)
+                </Text>
                 <Progress value={50} className="h-4" />
               </View>
               <View className="space-y-2">
-                <Text className="text-sm text-muted-foreground">Extra Large (h-5)</Text>
+                <Text className="text-sm text-muted-foreground">
+                  Extra Large (h-5)
+                </Text>
                 <Progress value={50} className="h-5" />
               </View>
             </View>
@@ -134,26 +143,26 @@ export default function ProgressExampleScreen() {
             <View className="space-y-6">
               <View className="space-y-2">
                 <Text className="text-sm text-muted-foreground">Success</Text>
-                <Progress 
-                  value={75} 
-                  className="bg-green-200" 
-                  indicatorClassName="bg-green-600" 
+                <Progress
+                  value={75}
+                  className="bg-green-200"
+                  indicatorClassName="bg-green-600"
                 />
               </View>
               <View className="space-y-2">
                 <Text className="text-sm text-muted-foreground">Warning</Text>
-                <Progress 
-                  value={50} 
-                  className="bg-yellow-200" 
-                  indicatorClassName="bg-yellow-500" 
+                <Progress
+                  value={50}
+                  className="bg-yellow-200"
+                  indicatorClassName="bg-yellow-500"
                 />
               </View>
               <View className="space-y-2">
                 <Text className="text-sm text-muted-foreground">Error</Text>
-                <Progress 
-                  value={25} 
-                  className="bg-red-200" 
-                  indicatorClassName="bg-red-600" 
+                <Progress
+                  value={25}
+                  className="bg-red-200"
+                  indicatorClassName="bg-red-600"
                 />
               </View>
             </View>

@@ -163,4 +163,11 @@ export const componentsList: ComponentItem[] = [
     icon: 'loader',
     route: 'components/progressExample',
   },
+  {
+    id: 'pagination',
+    name: 'Pagination',
+    description: 'A pagination component',
+    icon: 'chevron-left',
+    route: 'components/paginationExample',
+  },
 ]; 
