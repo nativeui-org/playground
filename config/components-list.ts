@@ -184,4 +184,11 @@ export const componentsList: ComponentItem[] = [
     icon: 'info',
     route: 'components/tooltipExample',
   },
+  {
+    id: 'collapsible',
+    name: 'Collapsible',
+    description: 'A collapsible component',
+    icon: 'chevron-down',
+    route: 'components/collapsibleExample',
+  },
 ]; 
