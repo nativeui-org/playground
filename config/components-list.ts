@@ -191,4 +191,11 @@ export const componentsList: ComponentItem[] = [
     icon: 'chevron-down',
     route: 'components/collapsibleExample',
   },
+  {
+    id: 'breadcrumb',
+    name: 'Breadcrumb',
+    description: 'A breadcrumb component',
+    icon: 'chevron-right',
+    route: 'components/breadcrumbExample',
+  },
 ]; 
