@@ -198,4 +198,11 @@ export const componentsList: ComponentItem[] = [
     icon: 'chevron-right',
     route: 'components/breadcrumbExample',
   },
+  {
+    id: 'table',
+    name: 'Table',
+    description: 'A table component',
+    icon: 'tablet',
+    route: 'components/tableExample',
+  },
 ]; 
