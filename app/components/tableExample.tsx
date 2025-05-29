@@ -1,8 +1,9 @@
 import * as React from "react"
-import { View, Text, ScrollView, Pressable, Image } from "react-native"
+import { View, Text, ScrollView, Pressable } from "react-native"
 import { Stack } from "expo-router"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { ThemeToggle } from "@/components/ui"
+import { cn } from "@/lib/utils"
 import {
   Table,
   TableBody,
@@ -14,277 +15,262 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Ionicons } from "@expo/vector-icons"
-import { cn } from "@/lib/utils"
 
-// Sample data
-const invoices = [
+// Sample data for transactions
+const transactions = [
   {
-    invoice: "INV001",
-    paymentStatus: "Paid",
-    totalAmount: "$250.00",
-    paymentMethod: "Credit Card",
+    id: "TX001",
+    date: "2024-03-20",
+    description: "Grocery Store",
+    amount: -85.50,
+    category: "Shopping",
+    status: "completed",
   },
   {
-    invoice: "INV002",
-    paymentStatus: "Pending",
-    totalAmount: "$150.00",
-    paymentMethod: "PayPal",
+    id: "TX002",
+    date: "2024-03-19",
+    description: "Salary Deposit",
+    amount: 2500.00,
+    category: "Income",
+    status: "completed",
   },
   {
-    invoice: "INV003",
-    paymentStatus: "Unpaid",
-    totalAmount: "$350.00",
-    paymentMethod: "Bank Transfer",
+    id: "TX003",
+    date: "2024-03-18",
+    description: "Restaurant",
+    amount: -45.75,
+    category: "Dining",
+    status: "pending",
+  },
+  {
+    id: "TX004",
+    date: "2024-03-17",
+    description: "Uber Ride",
+    amount: -22.50,
+    category: "Transport",
+    status: "completed",
+  },
+  {
+    id: "TX005",
+    date: "2024-03-16",
+    description: "Freelance Payment",
+    amount: 750.00,
+    category: "Income",
+    status: "completed",
   },
 ]
 
-const products = [
-  {
-    name: "Basic Plan",
-    price: "$10/mo",
-    storage: "10 GB",
-    users: "2 users",
-    support: "Email",
-    backup: "Weekly",
-  },
-  {
-    name: "Pro Plan",
-    price: "$25/mo",
-    storage: "50 GB",
-    users: "5 users",
-    support: "24/7 Phone",
-    backup: "Daily",
-  },
-  {
-    name: "Enterprise",
-    price: "$50/mo",
-    storage: "200 GB",
-    users: "Unlimited",
-    support: "24/7 Priority",
-    backup: "Real-time",
-  },
+// Sample data for monthly summary
+const monthlySummary = [
+  { category: "Income", amount: 3250.00 },
+  { category: "Shopping", amount: -425.75 },
+  { category: "Dining", amount: -185.50 },
+  { category: "Transport", amount: -95.25 },
 ]
-
-const StatusBadge = ({ status }: { status: string }) => (
-  <View className={cn(
-    "px-2.5 py-0.5 rounded-full",
-    status === "Paid" ? "bg-green-100" :
-    status === "Pending" ? "bg-yellow-100" :
-    "bg-red-100"
-  )}>
-    <Text className={cn(
-      "text-xs font-medium",
-      status === "Paid" ? "text-green-800" :
-      status === "Pending" ? "text-yellow-800" :
-      "text-red-800"
-    )}>
-      {status}
-    </Text>
-  </View>
-)
 
 export default function TableExample() {
+  const formatCurrency = (amount: number) => {
+    return amount.toLocaleString('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    })
+  }
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+    })
+  }
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "completed":
+        return "text-green-600"
+      case "pending":
+        return "text-amber-600"
+      default:
+        return "text-gray-600"
+    }
+  }
+
+  const getAmountColor = (amount: number) => {
+    return amount >= 0 ? "text-green-600" : "text-red-600"
+  }
+
   return (
     <>
       <Stack.Screen
         options={{
-          title: "Table",
+          title: "Table Examples",
           headerRight: () => <ThemeToggle />,
         }}
       />
 
       <SafeAreaView className="flex-1 bg-background" edges={["bottom"]}>
-        <ScrollView className="flex-1">
-          <View className="p-4 space-y-8">
-            <View>
-              <Text className="text-2xl font-bold mb-2 text-foreground">
-                Table
-              </Text>
-              <Text className="text-base text-muted-foreground">
-                A responsive table component for mobile.
-              </Text>
-            </View>
+        <ScrollView className="flex-1 p-4">
+          {/* Recent Transactions Table */}
+          <View className="mb-8">
+            <Text className="text-2xl font-bold mb-2 text-foreground">
+              Recent Transactions
+            </Text>
+            <Text className="text-base mb-4 text-muted-foreground">
+              Your latest financial activities
+            </Text>
 
-            {/* Basic Table Example */}
-            <View className="space-y-4">
-              <Text className="text-lg font-semibold text-foreground">
-                Simple Table
-              </Text>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead width={140}>Invoice</TableHead>
-                    <TableHead width={100} align="center">Status</TableHead>
-                    <TableHead width={100} align="right">Amount</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {invoices.map((invoice, index) => (
-                    <TableRow key={invoice.invoice}>
-                      <TableCell columnIndex={0}>
-                        <Text className="font-medium">{invoice.invoice}</Text>
-                        <Text className="text-xs text-muted-foreground">
-                          {invoice.paymentMethod}
-                        </Text>
-                      </TableCell>
-                      <TableCell columnIndex={1}>
-                        <StatusBadge status={invoice.paymentStatus} />
-                      </TableCell>
-                      <TableCell columnIndex={2}>
-                        {invoice.totalAmount}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-                <TableFooter>
-                  <TableRow>
-                    <TableCell columnIndex={0}>
-                      <Text className="font-medium">Total</Text>
+            <Table>
+              <TableCaption>Your transaction history for March 2024.</TableCaption>
+              <TableHeader>
+                <TableRow>
+                  <TableHead width={100}>Date</TableHead>
+                  <TableHead width={180}>Description</TableHead>
+                  <TableHead width={120} align="right">Amount</TableHead>
+                  <TableHead width={120}>Status</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {transactions.map((tx) => (
+                  <TableRow key={tx.id}>
+                    <TableCell width={100}>
+                      <Text className="text-sm">{formatDate(tx.date)}</Text>
                     </TableCell>
-                    <TableCell columnIndex={1}>{""}</TableCell>
-                    <TableCell columnIndex={2}>$750.00</TableCell>
-                  </TableRow>
-                </TableFooter>
-              </Table>
-            </View>
-
-            {/* Product Comparison Table */}
-            <View className="space-y-4">
-              <Text className="text-lg font-semibold text-foreground">
-                Product Comparison
-              </Text>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead width={140}>Plan</TableHead>
-                    <TableHead width={100} align="right">Price</TableHead>
-                    <TableHead width={120} align="center">Storage</TableHead>
-                    <TableHead width={100} align="center">Users</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {products.map((product, index) => (
-                    <TableRow key={product.name}>
-                      <TableCell columnIndex={0}>
-                        <Text className="font-medium">{product.name}</Text>
-                        <Text className="text-xs text-muted-foreground">
-                          {product.support}
+                    <TableCell width={180}>
+                      <Text className="font-medium">{tx.description}</Text>
+                      <Text className="text-sm text-muted-foreground">{tx.category}</Text>
+                    </TableCell>
+                    <TableCell width={120} align="right">
+                      <Text className={cn("font-medium", getAmountColor(tx.amount))}>
+                        {formatCurrency(tx.amount)}
+                      </Text>
+                    </TableCell>
+                    <TableCell width={120}>
+                      <View className="flex-row items-center">
+                        <View className={cn(
+                          "w-2 h-2 rounded-full mr-2",
+                          tx.status === "completed" ? "bg-green-600" : "bg-amber-600"
+                        )} />
+                        <Text className={cn("capitalize", getStatusColor(tx.status))}>
+                          {tx.status}
                         </Text>
-                      </TableCell>
-                      <TableCell columnIndex={1}>
-                        <Text className="font-medium">{product.price}</Text>
-                      </TableCell>
-                      <TableCell columnIndex={2}>
-                        <View className="items-center">
-                          <Text>{product.storage}</Text>
-                          <Text className="text-xs text-muted-foreground">
-                            {product.backup} backup
-                          </Text>
+                      </View>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </View>
+
+          {/* Monthly Summary Table */}
+          <View className="mb-8">
+            <Text className="text-2xl font-bold mb-2 text-foreground">
+              Monthly Summary
+            </Text>
+            <Text className="text-base mb-4 text-muted-foreground">
+              March 2024 breakdown by category
+            </Text>
+
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead width={200}>Category</TableHead>
+                  <TableHead width={150} align="right">Amount</TableHead>
+                  <TableHead width={100} align="right">% of Total</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {monthlySummary.map((item) => (
+                  <TableRow key={item.category}>
+                    <TableCell width={200}>
+                      <View className="flex-row items-center">
+                        <View className={cn(
+                          "w-8 h-8 rounded-full mr-3 items-center justify-center",
+                          item.category === "Income" ? "bg-green-100" : "bg-red-100"
+                        )}>
+                          <Ionicons
+                            name={item.category === "Income" ? "trending-up" : "trending-down"}
+                            size={16}
+                            color={item.category === "Income" ? "#16a34a" : "#dc2626"}
+                          />
+                        </View>
+                        <Text className="font-medium">{item.category}</Text>
+                      </View>
+                    </TableCell>
+                    <TableCell width={150} align="right">
+                      <Text className={cn("font-medium", getAmountColor(item.amount))}>
+                        {formatCurrency(item.amount)}
+                      </Text>
+                    </TableCell>
+                    <TableCell width={100} align="right">
+                      <Text className="text-muted-foreground">
+                        {Math.abs((item.amount / 3250.00) * 100).toFixed(1)}%
+                      </Text>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TableCell width={200}>Net Total</TableCell>
+                  <TableCell width={150} align="right" className="font-bold">
+                    {formatCurrency(monthlySummary.reduce((acc, curr) => acc + curr.amount, 0))}
+                  </TableCell>
+                  <TableCell width={100} align="right">100%</TableCell>
+                </TableRow>
+              </TableFooter>
+            </Table>
+          </View>
+
+          {/* Compact Transaction List */}
+          <View className="mb-8">
+            <Text className="text-2xl font-bold mb-2 text-foreground">
+              Quick View
+            </Text>
+            <Text className="text-base mb-4 text-muted-foreground">
+              Simplified transaction list
+            </Text>
+
+            <Table>
+              <TableBody>
+                {transactions.slice(0, 3).map((tx) => (
+                  <Pressable key={tx.id}>
+                    <TableRow>
+                      <TableCell width={250}>
+                        <View className="flex-row items-center">
+                          <View className={cn(
+                            "w-10 h-10 rounded-full mr-3 items-center justify-center",
+                            tx.amount >= 0 ? "bg-green-100" : "bg-red-100"
+                          )}>
+                            <Ionicons
+                              name={tx.amount >= 0 ? "arrow-down" : "arrow-up"}
+                              size={20}
+                              color={tx.amount >= 0 ? "#16a34a" : "#dc2626"}
+                            />
+                          </View>
+                          <View>
+                            <Text className="font-medium">{tx.description}</Text>
+                            <Text className="text-sm text-muted-foreground">
+                              {formatDate(tx.date)}
+                            </Text>
+                          </View>
                         </View>
                       </TableCell>
-                      <TableCell columnIndex={3}>
-                        {product.users}
+                      <TableCell width={150} align="right">
+                        <Text className={cn("font-medium", getAmountColor(tx.amount))}>
+                          {formatCurrency(tx.amount)}
+                        </Text>
+                        <Text className="text-sm text-muted-foreground">
+                          {tx.category}
+                        </Text>
                       </TableCell>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </View>
-
-            {/* Feature Comparison */}
-            <View className="space-y-4">
-              <Text className="text-lg font-semibold text-foreground">
-                Feature Comparison
-              </Text>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead width={140}>Feature</TableHead>
-                    <TableHead width={100} align="center">Basic</TableHead>
-                    <TableHead width={100} align="center">Pro</TableHead>
-                    <TableHead width={100} align="center">Enterprise</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  <TableRow>
-                    <TableCell columnIndex={0}>Storage Space</TableCell>
-                    <TableCell columnIndex={1}>
-                      <View className="items-center">
-                        <Ionicons name="checkmark" size={20} color="#16a34a" />
-                      </View>
-                    </TableCell>
-                    <TableCell columnIndex={2}>
-                      <View className="items-center">
-                        <Ionicons name="checkmark" size={20} color="#16a34a" />
-                      </View>
-                    </TableCell>
-                    <TableCell columnIndex={3}>
-                      <View className="items-center">
-                        <Ionicons name="checkmark" size={20} color="#16a34a" />
-                      </View>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell columnIndex={0}>Custom Domain</TableCell>
-                    <TableCell columnIndex={1}>
-                      <View className="items-center">
-                        <Ionicons name="close" size={20} color="#dc2626" />
-                      </View>
-                    </TableCell>
-                    <TableCell columnIndex={2}>
-                      <View className="items-center">
-                        <Ionicons name="checkmark" size={20} color="#16a34a" />
-                      </View>
-                    </TableCell>
-                    <TableCell columnIndex={3}>
-                      <View className="items-center">
-                        <Ionicons name="checkmark" size={20} color="#16a34a" />
-                      </View>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell columnIndex={0}>API Access</TableCell>
-                    <TableCell columnIndex={1}>
-                      <View className="items-center">
-                        <Ionicons name="close" size={20} color="#dc2626" />
-                      </View>
-                    </TableCell>
-                    <TableCell columnIndex={2}>
-                      <View className="items-center">
-                        <Ionicons name="close" size={20} color="#dc2626" />
-                      </View>
-                    </TableCell>
-                    <TableCell columnIndex={3}>
-                      <View className="items-center">
-                        <Ionicons name="checkmark" size={20} color="#16a34a" />
-                      </View>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell columnIndex={0}>24/7 Support</TableCell>
-                    <TableCell columnIndex={1}>
-                      <View className="items-center">
-                        <Ionicons name="close" size={20} color="#dc2626" />
-                      </View>
-                    </TableCell>
-                    <TableCell columnIndex={2}>
-                      <View className="items-center">
-                        <Ionicons name="checkmark" size={20} color="#16a34a" />
-                      </View>
-                    </TableCell>
-                    <TableCell columnIndex={3}>
-                      <View className="items-center">
-                        <Ionicons name="checkmark" size={20} color="#16a34a" />
-                      </View>
-                    </TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </View>
-
-            {/* Extra padding at the bottom */}
-            <View className="h-20" />
+                  </Pressable>
+                ))}
+              </TableBody>
+            </Table>
           </View>
+
+          {/* Extra padding for scroll */}
+          <View className="h-20" />
         </ScrollView>
       </SafeAreaView>
     </>
