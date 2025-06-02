@@ -205,4 +205,11 @@ export const componentsList: ComponentItem[] = [
     icon: 'tablet',
     route: 'components/tableExample',
   },
+  {
+    id: 'label',
+    name: 'Label',
+    description: 'A label component',
+    icon: 'bold',
+    route: 'components/labelExample',
+  },
 ]; 
