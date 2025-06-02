@@ -240,4 +240,11 @@ export const componentsList: ComponentItem[] = [
     icon: 'image',
     route: 'components/carouselExample',
   },
+  {
+    id: 'dropdown',
+    name: 'Dropdown',
+    description: 'A dropdown component',
+    icon: 'chevron-down',
+    route: 'components/dropdownExample',
+  },
 ]; 
