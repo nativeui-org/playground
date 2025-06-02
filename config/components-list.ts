@@ -212,4 +212,11 @@ export const componentsList: ComponentItem[] = [
     icon: 'bold',
     route: 'components/labelExample',
   },
+  {
+    id: 'dialog',
+    name: 'Dialog',
+    description: 'A dialog component',
+    icon: 'info',
+    route: 'components/dialogExample',
+  },
 ]; 
