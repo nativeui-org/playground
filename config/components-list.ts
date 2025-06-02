@@ -233,4 +233,11 @@ export const componentsList: ComponentItem[] = [
     icon: 'square',
     route: 'components/cardExample',
   },
+  {
+    id: 'carousel',
+    name: 'Carousel',
+    description: 'A carousel component',
+    icon: 'image',
+    route: 'components/carouselExample',
+  },
 ]; 
