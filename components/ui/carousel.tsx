@@ -165,7 +165,12 @@ const Carousel = React.forwardRef<View, CarouselProps>(
                   style={[
                     {
                       height: orientation === "horizontal" ? 2 : 16,
-                      width: orientation === "horizontal" ? (currentIndex === index ? 16 : 8) : 2,
+                      width:
+                        orientation === "horizontal"
+                          ? currentIndex === index
+                            ? 16
+                            : 8
+                          : 2,
                       borderRadius: 2,
                       backgroundColor:
                         currentIndex === index
@@ -300,25 +305,26 @@ const Carousel = React.forwardRef<View, CarouselProps>(
 
 Carousel.displayName = "Carousel";
 
-const CarouselContent = React.forwardRef<View, React.ComponentProps<typeof View>>(
-  ({ className, children, ...props }, ref) => {
-    const { orientation } = useCarousel();
+const CarouselContent = React.forwardRef<
+  View,
+  React.ComponentProps<typeof View>
+>(({ className, children, ...props }, ref) => {
+  const { orientation } = useCarousel();
 
-    return (
-      <View
-        ref={ref}
-        className={cn(
-          "flex",
-          orientation === "horizontal" ? "flex-row" : "flex-col",
-          className
-        )}
-        {...props}
-      >
-        {children}
-      </View>
-    );
-  }
-);
+  return (
+    <View
+      ref={ref}
+      className={cn(
+        "flex",
+        orientation === "horizontal" ? "flex-row" : "flex-col",
+        className
+      )}
+      {...props}
+    >
+      {children}
+    </View>
+  );
+});
 
 CarouselContent.displayName = "CarouselContent";
 
@@ -346,41 +352,43 @@ const CarouselItem = React.forwardRef<View, React.ComponentProps<typeof View>>(
 
 CarouselItem.displayName = "CarouselItem";
 
-const CarouselPrevious = React.forwardRef<View, React.ComponentProps<typeof View>>(
-  ({ className, ...props }, ref) => {
-    const { scrollTo, currentIndex, canScrollPrev, orientation } = useCarousel();
+const CarouselPrevious = React.forwardRef<
+  View,
+  React.ComponentProps<typeof View>
+>(({ className, ...props }, ref) => {
+  const { scrollTo, currentIndex, canScrollPrev, orientation } = useCarousel();
 
-    if (!canScrollPrev) return null;
+  if (!canScrollPrev) return null;
 
-    return (
-      <Pressable
-        onPress={() => scrollTo(currentIndex - 1)}
-        className={cn(
-          "absolute z-10 p-3 rounded-full bg-background/50 backdrop-blur-sm",
-          orientation === "horizontal"
-            ? "left-4 top-1/2 -translate-y-1/2"
-            : "left-1/2 -translate-x-1/2 top-4",
-          className
-        )}
-        accessibilityRole="button"
-        accessibilityLabel="Previous image"
-        {...props}
-      >
-        <Ionicons 
-          name={orientation === "horizontal" ? "chevron-back" : "chevron-up"} 
-          size={28} 
-          color="#000" 
-        />
-      </Pressable>
-    );
-  }
-);
+  return (
+    <Pressable
+      onPress={() => scrollTo(currentIndex - 1)}
+      className={cn(
+        "absolute z-10 p-3 rounded-full bg-background/50 backdrop-blur-sm",
+        orientation === "horizontal"
+          ? "left-4 top-1/2 -translate-y-1/2"
+          : "left-1/2 -translate-x-1/2 top-4",
+        className
+      )}
+      accessibilityRole="button"
+      accessibilityLabel="Previous image"
+      {...props}
+    >
+      <Ionicons
+        name={orientation === "horizontal" ? "chevron-back" : "chevron-up"}
+        size={28}
+        color="#000"
+      />
+    </Pressable>
+  );
+});
 
 CarouselPrevious.displayName = "CarouselPrevious";
 
 const CarouselNext = React.forwardRef<View, React.ComponentProps<typeof View>>(
   ({ className, ...props }, ref) => {
-    const { scrollTo, currentIndex, canScrollNext, orientation } = useCarousel();
+    const { scrollTo, currentIndex, canScrollNext, orientation } =
+      useCarousel();
 
     if (!canScrollNext) return null;
 
@@ -398,10 +406,12 @@ const CarouselNext = React.forwardRef<View, React.ComponentProps<typeof View>>(
         accessibilityLabel="Next image"
         {...props}
       >
-        <Ionicons 
-          name={orientation === "horizontal" ? "chevron-forward" : "chevron-down"} 
-          size={28} 
-          color="#000" 
+        <Ionicons
+          name={
+            orientation === "horizontal" ? "chevron-forward" : "chevron-down"
+          }
+          size={28}
+          color="#000"
         />
       </Pressable>
     );
