@@ -219,4 +219,11 @@ export const componentsList: ComponentItem[] = [
     icon: 'info',
     route: 'components/dialogExample',
   },
+  {
+    id: 'alert-dialog',
+    name: 'Alert Dialog',
+    description: 'A alert dialog component',
+    icon: 'alert-circle',
+    route: 'components/alertDialogExample',
+  },
 ]; 
