@@ -139,7 +139,7 @@ export default function CardExample() {
                 </CardHeader>
                 <CardContent>
                   <View className="space-y-6">
-                    <View className="space-y-2">
+                    <View className="space-y-2 mb-4">
                       <Label nativeID="email">Email</Label>
                       <Input
                         id="email"
