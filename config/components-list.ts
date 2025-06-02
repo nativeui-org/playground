@@ -247,4 +247,11 @@ export const componentsList: ComponentItem[] = [
     icon: 'chevron-down',
     route: 'components/dropdownExample',
   },
+  {
+    id: 'calendar',
+    name: 'Calendar',
+    description: 'A calendar component',
+    icon: 'calendar',
+    route: 'components/calendarExample',
+  },
 ]; 
