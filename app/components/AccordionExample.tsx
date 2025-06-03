@@ -7,7 +7,7 @@ import {
   AccordionContent,
 } from "@/components/ui/accordion";
 import { Stack } from "expo-router";
-import { ThemeToggle } from "@/components/ui";
+import { ThemeToggle } from "@/components/ui/themeToggle";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function AccordionExample() {

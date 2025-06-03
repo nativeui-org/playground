@@ -254,4 +254,11 @@ export const componentsList: ComponentItem[] = [
     icon: 'calendar',
     route: 'components/calendarExample',
   },
+  {
+    id: 'dateTimePicker',
+    name: 'Date Time Picker',
+    description: 'A date time picker component',
+    icon: 'clock',
+    route: 'components/dateTimePickerExample',
+  },
 ]; 

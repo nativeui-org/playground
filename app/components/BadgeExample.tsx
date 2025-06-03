@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, ScrollView, Alert } from "react-native";
 import { Badge } from "@/components/ui/badge";
-import { ThemeToggle } from "@/components/ui";
+import { ThemeToggle } from "@/components/ui/themeToggle";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Stack } from "expo-router";
 import { Feather } from "@expo/vector-icons";

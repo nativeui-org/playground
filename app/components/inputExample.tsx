@@ -3,7 +3,7 @@ import { View, Text, ScrollView, KeyboardAvoidingView, Platform, Keyboard } from
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Stack } from "expo-router";
-import { ThemeToggle } from "@/components/ui";
+import { ThemeToggle } from "@/components/ui/themeToggle";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 

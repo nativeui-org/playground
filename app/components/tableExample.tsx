@@ -2,7 +2,7 @@ import * as React from "react"
 import { View, Text, ScrollView, Pressable } from "react-native"
 import { Stack } from "expo-router"
 import { SafeAreaView } from "react-native-safe-area-context"
-import { ThemeToggle } from "@/components/ui"
+import { ThemeToggle } from "@/components/ui/themeToggle"
 import { cn } from "@/lib/utils"
 import {
   Table,

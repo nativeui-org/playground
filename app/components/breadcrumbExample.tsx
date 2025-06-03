@@ -12,7 +12,7 @@ import {
   BreadcrumbSeparator,
   BreadcrumbEllipsis,
 } from "@/components/ui/breadcrumb";
-import { ThemeToggle } from "@/components/ui";
+import { ThemeToggle } from "@/components/ui/themeToggle";
 
 export default function BreadcrumbExample() {
   // Simple custom navigation function that you could replace with your actual navigation logic

@@ -6,7 +6,7 @@ import {
   RadioGroupLabel,
 } from "@/components/ui/radio-group";
 import { Stack } from "expo-router";
-import { ThemeToggle } from "@/components/ui";
+import { ThemeToggle } from "@/components/ui/themeToggle";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function RadioGroupExample() {

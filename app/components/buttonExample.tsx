@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, ScrollView, ActivityIndicator } from "react-native";
 import { Button } from "@/components/ui/button";
-import { ThemeToggle } from "@/components/ui";
+import { ThemeToggle } from "@/components/ui/themeToggle";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Feather } from "@expo/vector-icons";
 import { useColorScheme } from "nativewind";

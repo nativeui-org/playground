@@ -2,7 +2,7 @@ import * as React from "react";
 import { View, Text, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
 import { Stack } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { ThemeToggle } from "@/components/ui";
+import { ThemeToggle } from "@/components/ui/themeToggle";
 import { Combobox, ComboboxGroup, ComboboxItem, ComboboxLabel, ComboboxSeparator } from "@/components/ui/combobox";
 
 export default function ComboboxExample() {

@@ -2,7 +2,7 @@ import * as React from "react";
 import { View, Text, ScrollView } from "react-native";
 import { Checkbox, CheckboxLabel } from "@/components/ui/checkbox";
 import { Stack } from "expo-router";
-import { ThemeToggle } from "@/components/ui";
+import { ThemeToggle } from "@/components/ui/themeToggle";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function CheckboxExample() {

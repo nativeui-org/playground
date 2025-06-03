@@ -3,7 +3,7 @@ import { View, Text, FlatList, Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Feather } from "@expo/vector-icons";
 import { useTheme } from "@/context/ThemeContext";
-import { ThemeToggle } from "@/components/ui";
+import { ThemeToggle } from "@/components/ui/themeToggle";
 import { componentsList, ComponentItem } from "@/config/components-list";
 import { useRouter } from "expo-router";
 import { useColorScheme } from "nativewind";
