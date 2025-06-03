@@ -48,9 +48,8 @@ export default function CalendarExample() {
               onSelect={(date) => setQuickPickerDate(date as Date)}
               className="border border-border"
               enableQuickMonthYear={true}
-              locale="en"
               fromDate={new Date(2020, 0, 1)}
-              toDate={new Date(2030, 11, 31)}
+              toDate={new Date(2050, 11, 31)}
             />
             <Text className="mt-2 text-sm text-muted-foreground">
               Tap on the month/year to open native month/year picker
