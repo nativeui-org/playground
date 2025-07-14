@@ -1,13 +1,48 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { themes } from '@/lib/theme';
+import { ThemeProvider, useTheme } from '@/lib/theme-context';
+import * as Icons from "@expo/vector-icons";
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { cssInterop } from "nativewind";
+import { View } from 'react-native';
 import 'react-native-reanimated';
+import './global.css';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
+
+// Loop through all exported icons from @expo/vector-icons
+Object.keys(Icons).forEach((iconKey) => {
+  const IconComponent = (Icons as Record<string, any>)[iconKey];
+
+  // Apply cssInterop to each icon component dynamically
+  if (IconComponent) {
+    cssInterop(IconComponent, {
+      className: {
+        target: "style",
+        nativeStyleToProp: { height: true, width: true },
+      },
+    });
+  }
+});
+
+
+
+function AppLayout() {
+  const { theme } = useTheme();
+
+  return (
+    <View style={themes[theme]} className="flex-1">
+      <Stack
+        screenOptions={{
+          headerShown: false,
+        }}
+      />
+      <StatusBar style="auto" />
+    </View>
+  );
+}
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
@@ -18,12 +53,8 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
+    <ThemeProvider>
+      <AppLayout />
     </ThemeProvider>
   );
 }
