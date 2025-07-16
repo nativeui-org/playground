@@ -145,7 +145,6 @@ export default function DateTimePickerExample() {
   };
 
   return (
-    <>
       <SafeAreaView className="flex-1 bg-background" edges={["bottom"]}>
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -449,6 +448,5 @@ export default function DateTimePickerExample() {
           </ScrollView>
         </KeyboardAvoidingView>
       </SafeAreaView>
-    </>
   );
 }

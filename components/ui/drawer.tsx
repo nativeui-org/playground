@@ -1,19 +1,18 @@
 import * as React from "react";
 import {
-  View,
-  Text,
-  Modal,
-  TouchableWithoutFeedback,
-  Platform,
   Animated,
-  PanResponder,
   Dimensions,
-  StyleSheet,
   Easing,
   KeyboardAvoidingView,
+  Modal,
+  PanResponder,
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { cn } from "@/lib/utils";
 
 // Animation config constants
 const ANIMATION = {
@@ -101,8 +100,8 @@ interface DrawerContextValue {
 }
 
 export const DrawerContext = React.createContext<DrawerContextValue>({
-  close: () => {},
-  snapTo: () => {},
+  close: () => { },
+  snapTo: () => { },
   currentSnapIndex: 0,
   snapPoints: DRAWER_SIZES.MEDIUM,
   isClosing: false,
@@ -439,12 +438,13 @@ const Drawer = React.forwardRef<View, DrawerProps>(
 
           <Animated.View
             style={[styles.drawerContainer, { transform: [{ translateY }] }]}
-            className={cn(
-              "absolute bottom-0 left-0 right-0 bg-popover rounded-t-xl overflow-hidden",
-              Platform.OS === "ios" ? "ios:shadow-xl" : "android:elevation-24",
-              contentClassName
-            )}
+          // className={cn(
+          //   "absolute bottom-0 left-0 right-0 bg-popover rounded-t-xl overflow-hidden",
+          //   Platform.OS === "ios" ? "ios:shadow-xl" : "android:elevation-24", 
+          //   contentClassName
+          // )}
           >
+
             <View {...panResponder.panHandlers}>
               <View className="w-full items-center py-2">
                 <View className="w-10 h-1 rounded-full bg-muted-foreground/30" />
@@ -512,10 +512,10 @@ const styles = StyleSheet.create({
   backdrop: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: "rgba(0, 0, 0, 0.4)",
+
   },
   drawerContainer: {
     height: SCREEN_HEIGHT,
-    paddingBottom: 20,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: -3 },
     shadowOpacity: 0.15,
