@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import * as React from "react";
 import {
   Animated,
@@ -438,11 +439,11 @@ const Drawer = React.forwardRef<View, DrawerProps>(
 
           <Animated.View
             style={[styles.drawerContainer, { transform: [{ translateY }] }]}
-          // className={cn(
-          //   "absolute bottom-0 left-0 right-0 bg-popover rounded-t-xl overflow-hidden",
-          //   Platform.OS === "ios" ? "ios:shadow-xl" : "android:elevation-24", 
-          //   contentClassName
-          // )}
+            className={cn(
+              "absolute bottom-0 left-0 right-0 bg-popover rounded-t-xl overflow-hidden",
+              Platform.OS === "ios" ? "ios:shadow-xl" : "android:elevation-24",
+              contentClassName
+            )}
           >
 
             <View {...panResponder.panHandlers}>

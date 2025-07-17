@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 import { Feather } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { useRouter } from 'expo-router';
 import { useColorScheme } from 'nativewind';
 import React from 'react';
 import { Platform, Text, TouchableOpacity, View } from 'react-native';
@@ -25,11 +25,13 @@ export function Header({
   className,
   titleClassName,
 }: HeaderProps) {
-  const navigation = useNavigation();
+  // Replace navigation with router
+  const router = useRouter();
   const { colorScheme } = useColorScheme();
   const isDark = colorScheme === 'dark';
   
-  const canGoBack = navigation.canGoBack();
+  // Modify this to work with expo-router
+  const canGoBack = router.canGoBack();
   
   return (
     <SafeAreaView edges={['top']} className={cn(
@@ -41,7 +43,8 @@ export function Header({
         <View className="w-10 items-center justify-center">
           {showBackButton && canGoBack && (
             <TouchableOpacity 
-              onPress={() => navigation.goBack()}
+              // Change this to use router.back()
+              onPress={() => router.back()}
               className="p-2"
               accessibilityLabel="Back"
               accessibilityRole="button"
