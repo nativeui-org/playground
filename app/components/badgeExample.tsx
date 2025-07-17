@@ -5,7 +5,6 @@ import React from "react";
 import { Alert, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-// TO REVIEW
 export default function BadgeExample() {
   const { colorScheme } = useColorScheme();
   const isDark = colorScheme === "dark";

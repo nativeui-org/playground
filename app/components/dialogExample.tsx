@@ -26,7 +26,6 @@ export default function DialogExample() {
   const [name, setName] = React.useState("John Doe");
   const [email, setEmail] = React.useState("john@example.com");
 
-  // États pour contrôler l'ouverture/fermeture des dialogues
   const [basicOpen, setBasicOpen] = React.useState(false);
   const [editOpen, setEditOpen] = React.useState(false);
   const [deleteOpen, setDeleteOpen] = React.useState(false);

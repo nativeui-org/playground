@@ -513,7 +513,6 @@ const styles = StyleSheet.create({
   backdrop: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: "rgba(0, 0, 0, 0.4)",
-
   },
   drawerContainer: {
     height: SCREEN_HEIGHT,
