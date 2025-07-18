@@ -4,7 +4,6 @@ import { ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SwitchExample() {
-  // États séparés pour chaque switch
   const [notifications, setNotifications] = React.useState(true);
   const [wifi, setWifi] = React.useState(true);
   const [bluetooth, setBluetooth] = React.useState(false);
