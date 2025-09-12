@@ -117,14 +117,14 @@ const SettingsList = () => {
             <Ionicons
               name={item.icon}
               size={22}
-              color="#6B7280"
+              className="color-muted-foreground"
               style={{ marginRight: 12 }}
             />
             <Text className="text-base text-foreground">{item.label}</Text>
             <Ionicons
               name="chevron-forward"
               size={16}
-              color="#6B7280"
+              className="color-muted-foreground"
               style={{ marginLeft: "auto" }}
             />
           </Button>
@@ -307,7 +307,7 @@ export default function DrawerExampleScreen() {
                 <Ionicons
                   name="chatbubble-outline"
                   size={20}
-                  color="#4F46E5"
+                  className="color-primary"
                   style={{ marginRight: 8 }}
                 />
                 <Text className="text-base font-medium text-primary">
@@ -339,7 +339,7 @@ export default function DrawerExampleScreen() {
                   <Ionicons
                     name="settings-outline"
                     size={20}
-                    color="#6B7280"
+                    className="color-muted-foreground"
                     style={{ marginRight: 8 }}
                   />
                   <Text className="text-base text-foreground">Settings</Text>

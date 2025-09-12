@@ -1,17 +1,17 @@
+import { cn } from "@/lib/utils";
 import * as React from "react";
 import {
-  View,
-  Text,
-  Pressable,
-  Modal,
-  TouchableWithoutFeedback,
-  Platform,
   Animated,
-  StyleSheet,
   Dimensions,
   LayoutChangeEvent,
+  Modal,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
 } from "react-native";
-import { cn } from "@/lib/utils";
 
 interface TooltipProps {
   children: React.ReactNode;
@@ -390,4 +390,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider };
+export { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger };
+
