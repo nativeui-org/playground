@@ -261,4 +261,11 @@ export const componentsList: ComponentItem[] = [
     icon: 'clock',
     route: 'components/dateTimePickerExample',
   },
+  {
+    id: 'toast',
+    name: 'Toast',
+    description: 'A toast component',
+    icon: 'bell',
+    route: 'components/toastUsage',
+  }
 ]; 
